@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33414.496
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteImageProviderForImageSharp", "RemoteImageProviderForImageSharp\RemoteImageProviderForImageSharp.csproj", "{972CF2B9-7B98-46F8-B69E-0F0547FFEC79}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{972CF2B9-7B98-46F8-B69E-0F0547FFEC79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{972CF2B9-7B98-46F8-B69E-0F0547FFEC79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{972CF2B9-7B98-46F8-B69E-0F0547FFEC79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{972CF2B9-7B98-46F8-B69E-0F0547FFEC79}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {43F52060-867A-4B93-992F-F5B27E5FB6D8}
+	EndGlobalSection
+EndGlobal
