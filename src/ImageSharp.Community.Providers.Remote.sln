@@ -5,9 +5,9 @@ VisualStudioVersion = 17.5.33414.496
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageSharp.Community.Providers.Remote", "ImageSharp.Community.Providers.Remote\ImageSharp.Community.Providers.Remote.csproj", "{972CF2B9-7B98-46F8-B69E-0F0547FFEC79}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoteImageProviderUmbracoDemo", "RemoteImageProviderDemo\RemoteImageProviderUmbracoDemo.csproj", "{A60EB7B1-23D9-40AD-AD83-76DC8CE5598E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoteImageProviderUmbracoDemo", "demos\RemoteImageProviderUmbracoDemo\RemoteImageProviderUmbracoDemo.csproj", "{A60EB7B1-23D9-40AD-AD83-76DC8CE5598E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteImageProviderMvcDemo", "RemoteImageProviderMvcDemo\RemoteImageProviderMvcDemo.csproj", "{8907EF51-D51E-4DFA-8DE7-9F1DCD2FF5D7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteImageProviderMvcDemo", "demos\RemoteImageProviderMvcDemo\RemoteImageProviderMvcDemo.csproj", "{8907EF51-D51E-4DFA-8DE7-9F1DCD2FF5D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
