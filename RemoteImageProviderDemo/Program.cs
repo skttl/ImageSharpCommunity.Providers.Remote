@@ -1,4 +1,4 @@
-namespace RemoteImageProviderDemo
+namespace RemoteImageProviderUmbracoDemo
 {
     public class Program
     {

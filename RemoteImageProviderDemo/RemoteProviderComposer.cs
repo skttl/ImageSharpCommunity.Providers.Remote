@@ -2,7 +2,7 @@
 using SixLabors.ImageSharp.Web.DependencyInjection;
 using Umbraco.Cms.Core.Composing;
 
-namespace RemoteImageProviderDemo
+namespace RemoteImageProviderUmbracoDemo
 {
     public class RemoteProviderComposer : IComposer
     {
