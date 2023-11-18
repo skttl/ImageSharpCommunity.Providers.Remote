@@ -42,9 +42,11 @@ public void ConfigureServices(IServiceCollection services)
     services.AddImageSharp()
             .Configure<RemoteImageProviderOptions>(options =>
             {
-                options.AllowedDomains = new[] { "example.com" };
-                options.Prefix = "/images";
-                // Additional configuration options...
+                options.Settings
+                    .Add(new("/remote")
+                    {
+                        AllowedDomains = new List<string>() { "*" }
+                    });
             })
             .InsertProvider<RemoteImageProvider>(0);
 }
@@ -58,7 +60,11 @@ By default, no domains is allowed, so you have to configure your desired `Remote
 
 The `RemoteImageProviderOptions` class provides the following configuration options:
 
-- `Prefix`: Specifies the local path to prefix all remote image requests with. For example, setting this to `/remote` allows requests like `/remote/https://test.com/test.png` to pass through this provider.
+- `Settings`: A list of the different allowed sources for images. 
+
+Each setting (`RemoteImageProviderSetting`) provides the following configuration options:
+
+- `Prefix`: Specified in the constructor, and defines the local path to prefix all remote image requests with. For example, setting this to `/remote` allows requests like `/remote/https://test.com/test.png` to pass through this provider.
 
 - `RemoteUrlPrefix` (optional): Prefixes the URL on the server. For example, setting this to `https://test.com/` allows requests like `/remote/test.png` to download `https://test.com/test.png`. Note: You still need to allow the specific domain in the `AllowedDomains` setting.
 
