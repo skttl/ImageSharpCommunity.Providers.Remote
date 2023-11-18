@@ -17,13 +17,16 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
+    - name: Set VERSION variable from tag
+      run: echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: 6.0.x
   
     - name: Build ImageSharp Package
-      run: dotnet build src\ImageSharp.Community.Providers.Remote\ImageSharp.Community.Providers.Remote.csproj --configuration Release
+      run: dotnet build src\ImageSharp.Community.Providers.Remote\ImageSharp.Community.Providers.Remote.csproj /p:Version=${VERSION} --output . --configuration Release
 
     - name: Push to NuGet
-      run: dotnet nuget push **\*.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
+      run: dotnet nuget push **\ImageSharp.Community.Providers.Remote.${VERSION}.csproj --api-key ${{secrets.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
