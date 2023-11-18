@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using SixLabors.ImageSharp.Web.Providers;
 using SixLabors.ImageSharp.Web.Resolvers;
 using Microsoft.Extensions.Options;
@@ -20,11 +20,11 @@ public class RemoteImageProvider : IImageProvider
 
     public ProcessingBehavior ProcessingBehavior => ProcessingBehavior.All;
 
-    private Func<HttpContext, bool>? match;
+    private Func<HttpContext, bool>? _match;
     public Func<HttpContext, bool> Match
     {
-        get => this.match ?? this.IsMatch;
-        set => this.match = value;
+        get => _match ?? IsMatch;
+        set => _match = value;
     }
 
     public bool IsValidRequest(HttpContext context)
@@ -60,7 +60,7 @@ public class RemoteImageProvider : IImageProvider
             return null;
         }
 
-        var remoteUrl = options.RemoteUrlPrefix + context.Request.Path.Value?.Substring(prefix.Length + 1);
+        var remoteUrl = options.RemoteUrlPrefix + context.Request.Path.Value?[(prefix.Length + 1)..];
         return remoteUrl?.Replace(" ", "%20");
     }
 

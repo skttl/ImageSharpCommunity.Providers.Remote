@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +10,11 @@ public class RemoteImageProviderSetting
 {
     public RemoteImageProviderSetting(string prefix)
     {
-        if (!prefix.StartsWith("/")) prefix = $"/{prefix}";
+        if (!prefix.StartsWith("/"))
+        {
+            prefix = $"/{prefix}";
+        }
+
         Prefix = prefix;
     }
 

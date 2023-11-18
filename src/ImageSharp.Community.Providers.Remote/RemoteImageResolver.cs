@@ -1,4 +1,4 @@
-﻿using ImageSharp.Community.Providers.Remote.Configuration;
+using ImageSharp.Community.Providers.Remote.Configuration;
 using SixLabors.ImageSharp.Web.Resolvers;
 namespace ImageSharp.Community.Providers.Remote;
 
@@ -6,13 +6,13 @@ public class RemoteImageResolver : IImageResolver
 {
     private readonly IHttpClientFactory _clientFactory;
     private readonly string _url;
-    private readonly RemoteImageProviderOptions _options;
+    private readonly RemoteImageProviderSetting _setting;
 
-    public RemoteImageResolver(IHttpClientFactory clientFactory, string url, RemoteImageProviderOptions options)
+    public RemoteImageResolver(IHttpClientFactory clientFactory, string url, RemoteImageProviderSetting setting)
     {
         _clientFactory = clientFactory;
         _url = url;
-        _options = options;
+        _setting = setting;
     }
 
     public async Task<ImageMetadata> GetMetaDataAsync()
@@ -45,17 +45,16 @@ public class RemoteImageResolver : IImageResolver
 
     private HttpClient GetHttpClient()
     {
-        var client = _clientFactory.CreateClient(_options.HttpClientName);
+        var client = _clientFactory.CreateClient(_setting.HttpClientName);
 
-        if (!string.IsNullOrWhiteSpace(_options.UserAgent))
+        if (!string.IsNullOrWhiteSpace(_setting.UserAgent))
         {
             // set useragent string of client:
-            client.DefaultRequestHeaders.Add("User-Agent", _options.UserAgent);
+            client.DefaultRequestHeaders.Add("User-Agent", _setting.UserAgent);
         }
-        client.Timeout = TimeSpan.FromMilliseconds(_options.Timeout);
-        client.MaxResponseContentBufferSize = _options.MaxBytes;
+        client.Timeout = TimeSpan.FromMilliseconds(_setting.Timeout);
+        client.MaxResponseContentBufferSize = _setting.MaxBytes;
 
         return client;
     }
 }
-    
