@@ -1,10 +1,23 @@
-﻿namespace ImageSharp.Community.Providers.Remote;
-public class RemoteImageProviderOptions
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ImageSharp.Community.Providers.Remote.Configuration;
+
+public class RemoteImageProviderSetting
 {
+    public RemoteImageProviderSetting(string prefix)
+    {
+        if (!prefix.StartsWith("/")) prefix = $"/{prefix}";
+        Prefix = prefix;
+    }
+
     /// <summary>
     /// The local path to prefix all remote image requests with. Eg. /remote makes eg. /remote/https://test.com/test.png pass through this provider.
     /// </summary>
-    public string Prefix { get; set; } = "/remote";
+    public string Prefix { get; set; }
 
     /// <summary>
     /// (Optional) Prefix the url on the server, eg. set this to https://test.com/, and /remote/test.png will download https://test.com/test.png
@@ -35,6 +48,4 @@ public class RemoteImageProviderOptions
     /// Sets allowable domains to process images from.
     /// </summary>
     public List<string> AllowedDomains { get; set; } = new List<string>();
-
-    public List<RemoteImageProviderOptions>? AdditionalOptions { get; set; }
 }

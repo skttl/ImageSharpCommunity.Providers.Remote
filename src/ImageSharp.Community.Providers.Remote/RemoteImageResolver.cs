@@ -1,4 +1,5 @@
-﻿using SixLabors.ImageSharp.Web.Resolvers;
+﻿using ImageSharp.Community.Providers.Remote.Configuration;
+using SixLabors.ImageSharp.Web.Resolvers;
 namespace ImageSharp.Community.Providers.Remote;
 
 public class RemoteImageResolver : IImageResolver

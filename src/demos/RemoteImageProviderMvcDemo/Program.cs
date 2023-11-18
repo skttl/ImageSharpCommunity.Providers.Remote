@@ -1,4 +1,5 @@
 using ImageSharp.Community.Providers.Remote;
+using ImageSharp.Community.Providers.Remote.Configuration;
 using SixLabors.ImageSharp.Web.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,19 +11,15 @@ builder.Services
     .AddHttpClient()
     .Configure<RemoteImageProviderOptions>(options =>
     {
-        options.AllowedDomains = new() { "umbraco.com" };
-
-        options.AdditionalOptions = new List<RemoteImageProviderOptions>()
+        options.Settings = new List<RemoteImageProviderSetting>()
         {
-            new ()
+            new ("/ourumb")
             {
-                Prefix = "/ourumb",
                 RemoteUrlPrefix = "https://our.umbraco.com/",
                 AllowedDomains = new List<string>() { "our.umbraco.com" }
             },
-            new ()
+            new ("/remote")
             {
-                Prefix = "/allremote",
                 AllowedDomains = new List<string>() { "*" }
             }
         };

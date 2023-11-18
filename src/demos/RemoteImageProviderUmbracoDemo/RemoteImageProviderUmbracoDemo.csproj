@@ -18,7 +18,7 @@
       Include="..\ImageSharp.Community.Providers.Remote\ImageSharp.Community.Providers.Remote.csproj" />-->
     <!-- Opt-in to app-local ICU to ensure consistent globalization APIs across different platforms -->
     <PackageReference Include="Microsoft.ICU.ICU4C.Runtime" Version="68.2.0.9" />
-    <ProjectReference Include="..\ImageSharp.Community.Providers.Remote\ImageSharp.Community.Providers.Remote.csproj" />
+    <ProjectReference Include="..\..\ImageSharp.Community.Providers.Remote\ImageSharp.Community.Providers.Remote.csproj" />
     <RuntimeHostConfigurationOption Include="System.Globalization.AppLocalIcu" Value="68.2.0.9" Condition="$(RuntimeIdentifier.StartsWith('linux')) or $(RuntimeIdentifier.StartsWith('win')) or ('$(RuntimeIdentifier)' == '' and !$([MSBuild]::IsOSPlatform('osx')))" />
   </ItemGroup>
 
