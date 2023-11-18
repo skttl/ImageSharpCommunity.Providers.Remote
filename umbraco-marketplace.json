@@ -1,0 +1,14 @@
+{
+    "$schema": "https://marketplace.umbraco.com/umbraco-marketplace-schema.json", 
+    "AuthorDetails": {
+      "Name": "Søren Kottal",
+      "ImageUrl": "https://github.com/skttl.png"
+    },
+    "Category": "Developer Tools",
+    "Description": "",
+    "LicenseTypes": [ "Free" ],
+    "IssueTrackerUrl": "https://github.com/skttl/ImageSharp.Community.Providers.Remote/issues",
+    "PackageType": "Package",
+    "Tags": [],
+    "Title": "Remote Image Provider for ImageSharp"
+  }

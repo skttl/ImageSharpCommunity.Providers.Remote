@@ -24,6 +24,9 @@ jobs:
   
     - name: Build ImageSharp Package
       run: dotnet build src\ImageSharp.Community.Providers.Remote\ImageSharp.Community.Providers.Remote.csproj --configuration Release
+  
+    - name: Build Umbraco Package
+      run: dotnet build src\Umbraco.Community.ImageSharpRemoteImages\Umbraco.Community.ImageSharpRemoteImages.csproj --configuration Release
 
     - name: Push to NuGet
       run: dotnet nuget push **\*.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json

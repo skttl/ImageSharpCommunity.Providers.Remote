@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <StaticWebAssetBasePath>App_Plugins</StaticWebAssetBasePath>
+    <ContentTargetFolders>.</ContentTargetFolders>
+    <Product>Umbraco.Community.ImageSharpRemoteImages</Product>
+    <PackageId>Umbraco.Community.ImageSharpRemoteImages</PackageId>
+    <Title>ImageSharpRemoteImages</Title>
+    <Description>...</Description>
+    <PackageTags>umbraco;umbraco-marketplace</PackageTags>
+    <RootNamespace>Umbraco.Community.ImageSharpRemoteImages</RootNamespace>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Version>0.1.0</Version>
+    <Authors>Søren Kottal</Authors>
+    <Copyright>$([System.DateTime]::UtcNow.ToString(`yyyy`)) © Søren Kottal</Copyright>
+    <PackageProjectUrl>https://github.com/skttl/ImageSharp.Community.Providers.Remote</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/skttl/ImageSharp.Community.Providers.Remote</RepositoryUrl>
+    <PackageReadmeFile>README_nuget.md</PackageReadmeFile>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Umbraco.Cms.Web.Website" Version="10.0.0" />
+    <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="10.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\docs\README_nuget_Umbraco.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
