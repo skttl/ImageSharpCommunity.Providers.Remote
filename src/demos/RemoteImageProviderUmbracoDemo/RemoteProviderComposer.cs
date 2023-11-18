@@ -13,20 +13,18 @@ namespace RemoteImageProviderUmbracoDemo
             builder.Services
                 .Configure<RemoteImageProviderOptions>(options =>
                 {
-                    options.Settings = new List<RemoteImageProviderSetting>()
-                    {
-                        new ("/ourumb")
+                    options.Settings
+                        .Add(new("/ourumb")
                         {
-                            Prefix = "/ourumb",
                             RemoteUrlPrefix = "https://our.umbraco.com/",
                             AllowedDomains = new List<string>() { "our.umbraco.com" }
-                        },
-                        new ("/allremote")
+                        });
+
+                    options.Settings
+                        .Add(new("/remote")
                         {
-                            Prefix = "/allremote",
                             AllowedDomains = new List<string>() { "*" }
-                        }
-                    };
+                        });
                 })
                 .AddImageSharp()
                 // needs to insert it at position 0, because it needs to go before WebRootProvider

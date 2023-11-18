@@ -11,23 +11,23 @@ builder.Services
     .AddHttpClient()
     .Configure<RemoteImageProviderOptions>(options =>
     {
-        options.Settings = new List<RemoteImageProviderSetting>()
-        {
-            new ("/ourumb")
+        options.Settings
+            .Add(new("/ourumb")
             {
                 RemoteUrlPrefix = "https://our.umbraco.com/",
                 AllowedDomains = new List<string>() { "our.umbraco.com" }
-            },
-            new ("/remote")
+            });
+
+        options.Settings
+            .Add(new("/remote")
             {
                 AllowedDomains = new List<string>() { "*" }
-            }
-        };
+            });
     })
     .AddImageSharp()
     // needs to insert it at position 0, because it needs to go before WebRootProvider
     .InsertProvider<RemoteImageProvider>(0);
-    
+
 
 var app = builder.Build();
 
