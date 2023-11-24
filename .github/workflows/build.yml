@@ -10,4 +10,4 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
     - name: Build ImageSharp Package
-      run: dotnet pack ./src/ImageSharp.Community.Providers.Remote/ImageSharp.Community.Providers.Remote.csproj /p:NuGetVersion=${VERSION} /p:Version=${VERSION} --output . --configuration Release
+      run: dotnet build ./src/ImageSharp.Community.Providers.Remote/ImageSharp.Community.Providers.Remote.csproj --configuration Release
