@@ -5,11 +5,9 @@ on:
       - '**'
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v2
     - name: Build ImageSharp Package
       run: dotnet pack src\ImageSharp.Community.Providers.Remote\ImageSharp.Community.Providers.Remote.csproj /p:NuGetVersion=${VERSION} /p:Version=${VERSION} --output . --configuration Release
