@@ -2,10 +2,10 @@ using Microsoft.AspNetCore.Http;
 using SixLabors.ImageSharp.Web.Providers;
 using SixLabors.ImageSharp.Web.Resolvers;
 using Microsoft.Extensions.Options;
-using ImageSharp.Community.Providers.Remote.Configuration;
+using ImageSharpCommunity.Providers.Remote.Configuration;
 using System.Text.RegularExpressions;
 
-namespace ImageSharp.Community.Providers.Remote;
+namespace ImageSharpCommunity.Providers.Remote;
 
 public class RemoteImageProvider : IImageProvider
 {

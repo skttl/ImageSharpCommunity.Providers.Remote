@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageSharp.Community.Providers.Remote.Configuration;
+namespace ImageSharpCommunity.Providers.Remote.Configuration;
 
 public class RemoteImageProviderSetting
 {

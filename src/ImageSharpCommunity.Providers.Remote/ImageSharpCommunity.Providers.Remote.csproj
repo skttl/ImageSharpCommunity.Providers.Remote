@@ -2,26 +2,24 @@
 
   <PropertyGroup>
     <Authors>Søren Kottal</Authors>
-    <AssemblyName>SixLabors.ImageSharp.Web.Providers.Azure</AssemblyName>
-    <AssemblyTitle>SixLabors.ImageSharp.Web.Providers.Azure</AssemblyTitle>
     <Copyright>$([System.DateTime]::UtcNow.ToString(`yyyy`)) © Søren Kottal</Copyright>
     <Description>
-      ImageSharp.Community.Providers.Remote is a library that provides remote image
+      ImageSharpCommunity.Providers.Remote is a library that provides remote image
       loading functionality for the ImageSharp.Web library. It allows you to load images from remote
       URLs and integrate them seamlessly into your ImageSharp-based applications.
     </Description>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <PackageId>ImageSharp.Community.Providers.Remote</PackageId>
+    <PackageId>ImageSharpCommunity.Providers.Remote</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/skttl/ImageSharp.Community.Providers.Remote</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/skttl/ImageSharpCommunity.Providers.Remote</PackageProjectUrl>
     <PackageReadmeFile>README_nuget.md</PackageReadmeFile>
     <PackageTags>image</PackageTags>
-    <Product>ImageSharp.Community.Providers.Remote</Product>
+    <Product>ImageSharpCommunity.Providers.Remote</Product>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/skttl/ImageSharp.Community.Providers.Remote</RepositoryUrl>
-    <RootNamespace>ImageSharp.Community.Providers.Remote</RootNamespace>
+    <RepositoryUrl>https://github.com/skttl/ImageSharpCommunity.Providers.Remote</RepositoryUrl>
+    <RootNamespace>ImageSharpCommunity.Providers.Remote</RootNamespace>
     <TargetFramework>net6.0</TargetFramework>
     <Title>Remote Image Provider for ImageSharp.Web</Title>
     <Version>0.1.0</Version>

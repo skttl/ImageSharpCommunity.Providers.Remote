@@ -1,5 +1,5 @@
-﻿using ImageSharp.Community.Providers.Remote;
-using ImageSharp.Community.Providers.Remote.Configuration;
+﻿using ImageSharpCommunity.Providers.Remote;
+using ImageSharpCommunity.Providers.Remote.Configuration;
 using SixLabors.ImageSharp.Web.DependencyInjection;
 using Umbraco.Cms.Core.Composing;
 
