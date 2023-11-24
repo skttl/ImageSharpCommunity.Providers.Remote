@@ -13,7 +13,7 @@ public class RemoteImageProviderSetting
         if (!prefix.StartsWith("/"))
         {
             prefix = $"/{prefix}";
-        }
+        }   
 
         Prefix = prefix;
     }
