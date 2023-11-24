@@ -11,7 +11,5 @@ jobs:
       uses: actions/checkout@v3
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: 6.0.x
     - name: Build ImageSharp Package
       run: dotnet pack src\ImageSharp.Community.Providers.Remote\ImageSharp.Community.Providers.Remote.csproj /p:NuGetVersion=${VERSION} /p:Version=${VERSION} --output . --configuration Release
