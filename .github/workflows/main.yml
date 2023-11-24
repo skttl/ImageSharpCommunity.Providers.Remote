@@ -4,7 +4,7 @@ on:
     branches:
       - '**'
     tags:
-      - "[0-9]+.[0-9]+.[0-9]+(-.+)?"
+      - "v[0-9]+.[0-9]+.[0-9]+(-.+)?"
 jobs:
   build:
     runs-on: windows-latest
@@ -18,6 +18,8 @@ jobs:
       with:
         dotnet-version: 6.0.x
     - name: Build ImageSharp Package
-      run: dotnet build src\ImageSharp.Community.Providers.Remote\ImageSharp.Community.Providers.Remote.csproj /p:Version=${VERSION} --output . --configuration Release
+      run: dotnet pack src\ImageSharp.Community.Providers.Remote\ImageSharp.Community.Providers.Remote.csproj /p:Version=${VERSION} --output . --configuration Release
+    - name: Pack
+      run: dotnet pack src\ImageSharp.Community.Providers.Remote\ImageSharp.Community.Providers.Remote.csproj --configuration Release /p:Version=${VERSION} --no-build --output .
     - name: Push to NuGet
       run: dotnet nuget push **\ImageSharp.Community.Providers.Remote.${VERSION}.csproj --api-key ${{secrets.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json

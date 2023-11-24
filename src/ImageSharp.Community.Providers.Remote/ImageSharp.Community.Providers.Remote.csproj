@@ -13,7 +13,6 @@
       URLs and integrate them seamlessly into your ImageSharp-based applications.</Description>
     <PackageTags>image</PackageTags>
     <RootNamespace>ImageSharp.Community.Providers.Remote</RootNamespace>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>Søren Kottal</Authors>
     <Copyright>$([System.DateTime]::UtcNow.ToString(`yyyy`)) © Søren Kottal</Copyright>
     <PackageProjectUrl>https://github.com/skttl/ImageSharp.Community.Providers.Remote</PackageProjectUrl>
@@ -21,7 +20,6 @@
     <PackageReadmeFile>README_nuget.md</PackageReadmeFile>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <UpdateAssemblyInfo>false</UpdateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>
