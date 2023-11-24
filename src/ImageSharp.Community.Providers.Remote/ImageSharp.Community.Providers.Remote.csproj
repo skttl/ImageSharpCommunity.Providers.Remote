@@ -20,6 +20,7 @@
     <PackageReadmeFile>README_nuget.md</PackageReadmeFile>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>
