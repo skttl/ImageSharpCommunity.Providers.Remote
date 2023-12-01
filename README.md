@@ -1,6 +1,6 @@
-# ImageSharp.Community.Providers.Remote
+# ImageSharpCommunity.Providers.Remote
 
-ImageSharp.Community.Providers.Remote is a library that provides remote image loading functionality for the ImageSharp.Web library. It allows you to load images from remote URLs and integrate them seamlessly into your ImageSharp-based applications.
+ImageSharpCommunity.Providers.Remote is a library that provides remote image loading functionality for the ImageSharp.Web library. It allows you to load images from remote URLs and integrate them seamlessly into your ImageSharp-based applications.
 
 ## Installation
 
@@ -9,30 +9,30 @@ You can install the library via NuGet.
 # [Package Manager](#tab/tabid-1)
 
 ```bash
-PM > Install-Package ImageSharp.Community.Providers.Remote -Version VERSION_NUMBER
+PM > Install-Package ImageSharpCommunity.Providers.Remote -Version VERSION_NUMBER
 ```
 
 # [.NET CLI](#tab/tabid-2)
 
 ```bash
-dotnet add package ImageSharp.Community.Providers.Remote --version VERSION_NUMBER
+dotnet add package ImageSharpCommunity.Providers.Remote --version VERSION_NUMBER
 ```
 
 # [PackageReference](#tab/tabid-3)
 
 ```xml
-<PackageReference Include="ImageSharp.Community.Providers.Remote" Version="VERSION_NUMBER" />
+<PackageReference Include="ImageSharpCommunity.Providers.Remote" Version="VERSION_NUMBER" />
 ```
 
 # [Paket CLI](#tab/tabid-4)
 
 ```bash
-paket add ImageSharp.Community.Providers.Remote --version VERSION_NUMBER
+paket add ImageSharpCommunity.Providers.Remote --version VERSION_NUMBER
 ```
 
 ## Usage
 
-To use the `ImageSharp.Community.Providers.Remote` library, register the remote image provider in your application's services configuration. This can typically be done in the ConfigureServices method of your Startup class:
+To use the `ImageSharpCommunity.Providers.Remote` library, register the remote image provider in your application's services configuration. This can typically be done in the ConfigureServices method of your Startup class:
 
 ```csharp
 public void ConfigureServices(IServiceCollection services)
@@ -88,8 +88,8 @@ Please refer to the documentation or the XML comments in the code for more infor
 
 ## Contributing
 
-Contributions to the `ImageSharp.Community.Providers.Remote` library are welcome! If you encounter any issues or have suggestions for improvements, please feel free to create a new issue or submit a pull request.
+Contributions to the `ImageSharpCommunity.Providers.Remote` library are welcome! If you encounter any issues or have suggestions for improvements, please feel free to create a new issue or submit a pull request.
 
 ## License
 
-The `ImageSharp.Community.Providers.Remote` library is licensed under the [MIT License](https://opensource.org/licenses/MIT). Please see the [LICENSE](LICENSE) file for more details.
+The `ImageSharpCommunity.Providers.Remote` library is licensed under the [MIT License](https://opensource.org/licenses/MIT). Please see the [LICENSE](LICENSE) file for more details.

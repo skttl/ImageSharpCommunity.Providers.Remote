@@ -3,9 +3,6 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-	  <RestoreAdditionalProjectSources>
-		  https://ecreo-nuget.azurewebsites.net/nuget
-	  </RestoreAdditionalProjectSources>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,10 +12,10 @@
 
   <ItemGroup>
     <!--<ProjectReference
-      Include="..\ImageSharp.Community.Providers.Remote\ImageSharp.Community.Providers.Remote.csproj" />-->
+      Include="..\ImageSharpCommunity.Providers.Remote\ImageSharpCommunity.Providers.Remote.csproj" />-->
     <!-- Opt-in to app-local ICU to ensure consistent globalization APIs across different platforms -->
     <PackageReference Include="Microsoft.ICU.ICU4C.Runtime" Version="68.2.0.9" />
-    <ProjectReference Include="..\..\ImageSharp.Community.Providers.Remote\ImageSharp.Community.Providers.Remote.csproj" />
+    <ProjectReference Include="..\..\ImageSharpCommunity.Providers.Remote\ImageSharpCommunity.Providers.Remote.csproj" />
     <RuntimeHostConfigurationOption Include="System.Globalization.AppLocalIcu" Value="68.2.0.9" Condition="$(RuntimeIdentifier.StartsWith('linux')) or $(RuntimeIdentifier.StartsWith('win')) or ('$(RuntimeIdentifier)' == '' and !$([MSBuild]::IsOSPlatform('osx')))" />
   </ItemGroup>
 
