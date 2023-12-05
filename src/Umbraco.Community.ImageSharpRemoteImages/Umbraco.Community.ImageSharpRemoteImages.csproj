@@ -1,26 +1,45 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+<Project Sdk="Microsoft.NET.Sdk">
+  
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <StaticWebAssetBasePath>App_Plugins</StaticWebAssetBasePath>
-    <ContentTargetFolders>.</ContentTargetFolders>
-    <Product>Umbraco.Community.ImageSharpRemoteImages</Product>
-    <PackageId>Umbraco.Community.ImageSharpRemoteImages</PackageId>
-    <Title>ImageSharpRemoteImages</Title>
-    <Description>...</Description>
-    <PackageTags>umbraco;umbraco-marketplace</PackageTags>
-    <RootNamespace>Umbraco.Community.ImageSharpRemoteImages</RootNamespace>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>0.1.0</Version>
     <Authors>Søren Kottal</Authors>
     <Copyright>$([System.DateTime]::UtcNow.ToString(`yyyy`)) © Søren Kottal</Copyright>
-    <PackageProjectUrl>https://github.com/skttl/ImageSharp.Community.Providers.Remote</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/skttl/ImageSharp.Community.Providers.Remote</RepositoryUrl>
-    <PackageReadmeFile>README_nuget.md</PackageReadmeFile>
-    <RepositoryType>git</RepositoryType>
+    <Description>
+      ImageSharpCommunity.Providers.Remote is a library that provides remote image
+      loading functionality for the ImageSharp.Web library. It allows you to load images from remote
+      URLs and integrate them seamlessly into your ImageSharp-based applications.
+    </Description>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PackageId>Umbraco.Community.ImageSharpRemoteImages</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/skttl/ImageSharp.Community.Providers.Remote</PackageProjectUrl>
+    <PackageReadmeFile>README_nuget.md</PackageReadmeFile>
+    <PackageTags>image umbraco umbraco-marketplace</PackageTags>
+    <Product>Umbraco.Community.ImageSharpRemoteImages</Product>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/skttl/ImageSharpCommunity.Providers.Remote</RepositoryUrl>
+    <RootNamespace>ImageSharpCommunity.Providers.Remote</RootNamespace>
+    <TargetFramework>net6.0</TargetFramework>
+    <Title>Remote Image Provider for ImageSharp.Web in Umbraco</Title>
+    <Version>0.1.0</Version>
   </PropertyGroup>
+  
+  <ItemGroup>
+    <None Remove="appsettings-schema.umbraco-community-imagesharpremoteimages.json" />
+    <None Remove="buildTransitive\Umbraco.Community.ImageSharpRemoteImages.props" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Content Include="appsettings-schema.umbraco-community-imagesharpremoteimages.json" />
+    <Content Include="buildTransitive\Umbraco.Community.ImageSharpRemoteImages.props" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\docs\README_nuget.md" Link="README_nuget.md">
+      <PackagePath>\</PackagePath>
+      <Pack>True</Pack>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Umbraco.Cms.Web.Website" Version="10.0.0" />
@@ -28,10 +47,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\docs\README_nuget_Umbraco.md">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
+    <ProjectReference Include="..\ImageSharpCommunity.Providers.Remote\ImageSharpCommunity.Providers.Remote.csproj" />
   </ItemGroup>
 
 </Project>
