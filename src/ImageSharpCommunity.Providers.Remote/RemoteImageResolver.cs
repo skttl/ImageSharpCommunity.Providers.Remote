@@ -17,7 +17,7 @@ public class RemoteImageResolver : IImageResolver
 
     public async Task<ImageMetadata> GetMetaDataAsync()
     {
-        var client = GetHttpClient();
+        var client = _clientFactory.GetRemoteImageProviderHttpClient(_setting);
 
         var response = await client.SendAsync(new HttpRequestMessage(HttpMethod.Head, _url), HttpCompletionOption.ResponseHeadersRead);
 
@@ -36,25 +36,10 @@ public class RemoteImageResolver : IImageResolver
 
     public async Task<Stream> OpenReadAsync()
     {
-        var client = GetHttpClient();
+        var client = _clientFactory.GetRemoteImageProviderHttpClient(_setting);
 
         var response = await client.GetAsync(_url);
 
         return await response.Content.ReadAsStreamAsync();
-    }
-
-    private HttpClient GetHttpClient()
-    {
-        var client = _clientFactory.CreateClient(_setting.HttpClientName);
-
-        if (!string.IsNullOrWhiteSpace(_setting.UserAgent))
-        {
-            // set useragent string of client:
-            client.DefaultRequestHeaders.Add("User-Agent", _setting.UserAgent);
-        }
-        client.Timeout = TimeSpan.FromMilliseconds(_setting.Timeout);
-        client.MaxResponseContentBufferSize = _setting.MaxBytes;
-
-        return client;
     }
 }

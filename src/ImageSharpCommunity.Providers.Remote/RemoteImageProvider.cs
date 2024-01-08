@@ -1,9 +1,8 @@
+using ImageSharpCommunity.Providers.Remote.Configuration;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using SixLabors.ImageSharp.Web.Providers;
 using SixLabors.ImageSharp.Web.Resolvers;
-using Microsoft.Extensions.Options;
-using ImageSharpCommunity.Providers.Remote.Configuration;
-using System.Text.RegularExpressions;
 
 namespace ImageSharpCommunity.Providers.Remote;
 
@@ -30,15 +29,18 @@ public class RemoteImageProvider : IImageProvider
     public bool IsValidRequest(HttpContext context)
     {
         return
-            GetMatchingSetting(context) is RemoteImageProviderSetting options 
-            && GetRemoteUrl(context) is string url
-            && Uri.IsWellFormedUriString(url, UriKind.Absolute) 
-            && IsValidUrl(new Uri(url), options);
+            context.Request.Path.GetMatchingRemoteImageProviderSetting(_options) is RemoteImageProviderSetting setting
+            && context.Request.Path.GetSourceUrlForRemoteImageProviderUrl(_options) is string url
+            && Uri.TryCreate(url, UriKind.Absolute, out Uri? uri) && uri != null
+            && uri.IsValidForSetting(setting);
     }
 
     public Task<IImageResolver?> GetAsync(HttpContext context)
     {
-        if (GetRemoteUrl(context) is not string url || GetMatchingSetting(context) is not RemoteImageProviderSetting options)
+        if (
+            context.Request.Path.GetSourceUrlForRemoteImageProviderUrl(_options) is not string url
+            || context.Request.Path.GetMatchingRemoteImageProviderSetting(_options) is not RemoteImageProviderSetting options
+        )
         {
             return Task.FromResult((IImageResolver?)null);
         }
@@ -47,47 +49,8 @@ public class RemoteImageProvider : IImageProvider
             return Task.FromResult((IImageResolver?)new RemoteImageResolver(_clientFactory, url, options));
         }
     }
-
-    private string? GetRemoteUrl(HttpContext context)
-    {
-        if (
-            !context.Request.Path.HasValue 
-            || GetMatchingSetting(context) is not RemoteImageProviderSetting options
-            || options.Prefix is not string prefix 
-            || context.Request.Path.Value.Length <= prefix.Length
-            )
-        {
-            return null;
-        }
-
-        var remoteUrl = options.RemoteUrlPrefix + context.Request.Path.Value?[(prefix.Length + 1)..];
-        return remoteUrl?.Replace(" ", "%20");
-    }
-
-    private RemoteImageProviderSetting? GetMatchingSetting(HttpContext context)
-    {
-        return _options.Settings?.FirstOrDefault(x => IsMatch(context, x));
-    }
-
     private bool IsMatch(HttpContext context)
     {
-        return GetMatchingSetting(context) != null;
-    }
-
-    private bool IsMatch(HttpContext context, RemoteImageProviderSetting options)
-    {
-        return context.Request.Path.StartsWithSegments(options.Prefix, StringComparison.OrdinalIgnoreCase);
-    }
-
-    private static bool IsValidUrl(Uri url, RemoteImageProviderSetting options)
-    {
-        return 
-            options.AllowedDomains.Contains("*") 
-            || options.AllowedDomains.Contains(url.Host) 
-            || options.AllowedDomains.Any(d =>
-            {
-                var pattern = Regex.Escape(d).Replace("\\*", "(.*)");
-                return Regex.IsMatch(url.Host, $"^{pattern}$");
-            });
+        return context.Request.Path.GetMatchingRemoteImageProviderSetting(_options) != null;
     }
 }
