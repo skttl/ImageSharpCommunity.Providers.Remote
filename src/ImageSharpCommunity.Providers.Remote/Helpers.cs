@@ -7,6 +7,8 @@ namespace ImageSharpCommunity.Providers.Remote;
 
 public static class Helpers
 {
+    private static Dictionary<string, HttpClient> HttpClients { get; } = new Dictionary<string, HttpClient>();
+
     /// <summary>
     /// Gets the remote URL for a given path, based on the specified options.
     /// </summary>
@@ -15,17 +17,24 @@ public static class Helpers
     /// <returns>The remote URL for the given path, or null if no matching remote image provider setting is found.</returns>
     public static HttpClient GetRemoteImageProviderHttpClient(this IHttpClientFactory factory, RemoteImageProviderSetting setting)
     {
-        var client = factory.CreateClient(setting.HttpClientName);
+        if (HttpClients.TryGetValue(setting.ClientDictionaryKey, out HttpClient? HttpClient) && HttpClient is not null)
+        {
+            return HttpClient;
+        }
+
+        var httpClient = factory.CreateClient(setting.ClientDictionaryKey);
 
         if (!string.IsNullOrWhiteSpace(setting.UserAgent))
         {
             // set useragent string of client:
-            client.DefaultRequestHeaders.Add("User-Agent", setting.UserAgent);
+            httpClient.DefaultRequestHeaders.Add("User-Agent", setting.UserAgent);
         }
-        client.Timeout = TimeSpan.FromMilliseconds(setting.Timeout);
-        client.MaxResponseContentBufferSize = setting.MaxBytes;
+        httpClient.Timeout = TimeSpan.FromMilliseconds(setting.Timeout);
+        httpClient.MaxResponseContentBufferSize = setting.MaxBytes;
 
-        return client;
+        HttpClients.TryAdd(setting.ClientDictionaryKey, httpClient);
+
+        return httpClient;
     }
 
     /// <summary>
