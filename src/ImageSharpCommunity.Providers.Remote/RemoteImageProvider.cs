@@ -1,5 +1,6 @@
 using ImageSharpCommunity.Providers.Remote.Configuration;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SixLabors.ImageSharp.Web.Providers;
 using SixLabors.ImageSharp.Web.Resolvers;
@@ -10,11 +11,15 @@ public class RemoteImageProvider : IImageProvider
 {
     private readonly IHttpClientFactory _clientFactory;
     private readonly RemoteImageProviderOptions _options;
+    private readonly ILogger<RemoteImageProvider> _logger;
+    private readonly ILogger<RemoteImageResolver> _resolverLogger;
 
-    public RemoteImageProvider(IHttpClientFactory clientFactory, IOptions<RemoteImageProviderOptions> options)
+    public RemoteImageProvider(IHttpClientFactory clientFactory, IOptions<RemoteImageProviderOptions> options, ILogger<RemoteImageProvider> logger, ILogger<RemoteImageResolver> resolverLogger)
     {
         _clientFactory = clientFactory;
         _options = options.Value;
+        _logger = logger;
+        _resolverLogger = resolverLogger;
     }
 
     public ProcessingBehavior ProcessingBehavior => ProcessingBehavior.All;
@@ -42,11 +47,13 @@ public class RemoteImageProvider : IImageProvider
             || context.Request.Path.GetMatchingRemoteImageProviderSetting(_options) is not RemoteImageProviderSetting options
         )
         {
+            _logger.LogDebug("No matching remote image provider setting found for path: {path}", context.Request.Path);
             return Task.FromResult((IImageResolver?)null);
         }
         else
         {
-            return Task.FromResult((IImageResolver?)new RemoteImageResolver(_clientFactory, url, options));
+            _logger.LogDebug("Found matching remote image provider setting for path: {path}", context.Request.Path);
+            return Task.FromResult((IImageResolver?)new RemoteImageResolver(_clientFactory, url, options, _resolverLogger));
         }
     }
     private bool IsMatch(HttpContext context)
