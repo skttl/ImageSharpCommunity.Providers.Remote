@@ -1,4 +1,5 @@
 using ImageSharpCommunity.Providers.Remote.Configuration;
+using Microsoft.Extensions.Logging;
 using SixLabors.ImageSharp.Web.Resolvers;
 namespace ImageSharpCommunity.Providers.Remote;
 
@@ -7,54 +8,45 @@ public class RemoteImageResolver : IImageResolver
     private readonly IHttpClientFactory _clientFactory;
     private readonly string _url;
     private readonly RemoteImageProviderSetting _setting;
+    private readonly ILogger<RemoteImageResolver> _logger;
 
-    public RemoteImageResolver(IHttpClientFactory clientFactory, string url, RemoteImageProviderSetting setting)
+    public RemoteImageResolver(IHttpClientFactory clientFactory, string url, RemoteImageProviderSetting setting, ILogger<RemoteImageResolver> logger)
     {
         _clientFactory = clientFactory;
         _url = url;
         _setting = setting;
+        _logger = logger;
     }
 
     public async Task<ImageMetadata> GetMetaDataAsync()
     {
-        var client = GetHttpClient();
+        _logger.LogDebug("Requesting metadata from {Url}", _url);
+
+        var client = _clientFactory.GetRemoteImageProviderHttpClient(_setting);
 
         var response = await client.SendAsync(new HttpRequestMessage(HttpMethod.Head, _url), HttpCompletionOption.ResponseHeadersRead);
 
         if (!response.Content.Headers.ContentLength.HasValue)
         {
-            throw new Exception("Required header ContentLength is missing.");
+            _logger.LogDebug("ContentLength header missing from {Url}", _url);
         }
 
-        if (!response.Content.Headers.LastModified.HasValue || !response.Content.Headers.ContentLength.HasValue)
+        if (!response.Content.Headers.LastModified.HasValue)
         {
-            throw new Exception("Required header LastModified is missing.");
+            _logger.LogDebug("LastModified header missing from {Url}", _url);
         }
 
-        return new ImageMetadata(response.Content.Headers.LastModified.Value.UtcDateTime, response.Content.Headers.ContentLength.Value);
+        return new ImageMetadata(response.Content.Headers.LastModified.GetValueOrDefault().UtcDateTime, response.Content.Headers.ContentLength.GetValueOrDefault());
     }
 
     public async Task<Stream> OpenReadAsync()
     {
-        var client = GetHttpClient();
+        _logger.LogDebug("Requesting image from {Url}", _url);
+
+        var client = _clientFactory.GetRemoteImageProviderHttpClient(_setting);
 
         var response = await client.GetAsync(_url);
 
         return await response.Content.ReadAsStreamAsync();
-    }
-
-    private HttpClient GetHttpClient()
-    {
-        var client = _clientFactory.CreateClient(_setting.HttpClientName);
-
-        if (!string.IsNullOrWhiteSpace(_setting.UserAgent))
-        {
-            // set useragent string of client:
-            client.DefaultRequestHeaders.Add("User-Agent", _setting.UserAgent);
-        }
-        client.Timeout = TimeSpan.FromMilliseconds(_setting.Timeout);
-        client.MaxResponseContentBufferSize = _setting.MaxBytes;
-
-        return client;
     }
 }

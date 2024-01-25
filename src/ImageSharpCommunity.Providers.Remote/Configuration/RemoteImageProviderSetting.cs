@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace ImageSharpCommunity.Providers.Remote.Configuration;
 
 public class RemoteImageProviderSetting
@@ -13,7 +7,7 @@ public class RemoteImageProviderSetting
         if (!prefix.StartsWith("/"))
         {
             prefix = $"/{prefix}";
-        }   
+        }
 
         Prefix = prefix;
     }
@@ -29,14 +23,14 @@ public class RemoteImageProviderSetting
     public string? RemoteUrlPrefix { get; set; }
 
     /// <summary>
-    /// Maximum allowable download in bytes.
+    /// Maximum allowable download in bytes. (default 10485760 = 10MB)
     /// </summary>
-    public int MaxBytes { get; set; } = 4194304;
+    public int MaxBytes { get; set; } = 10485760;
 
     /// <summary>
-    /// Timeout for a request in milliseconds
+    /// Timeout for a request in milliseconds. (default 180000 = 180s = 3 minutes)
     /// </summary>
-    public int Timeout { get; set; } = 3000;
+    public int Timeout { get; set; } = 180000;
 
     /// <summary>
     /// Sets a useragent value for the request. Useful for social networks. See http://www.useragentstring.com/ for available values.
@@ -52,4 +46,6 @@ public class RemoteImageProviderSetting
     /// Sets allowable domains to process images from.
     /// </summary>
     public List<string> AllowedDomains { get; set; } = new List<string>();
+
+    internal string ClientDictionaryKey => $"{HttpClientName}_{UserAgent}_{Timeout}_{MaxBytes}";
 }
