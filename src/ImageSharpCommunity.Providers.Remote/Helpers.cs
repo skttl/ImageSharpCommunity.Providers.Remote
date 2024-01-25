@@ -2,6 +2,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using ImageSharpCommunity.Providers.Remote.Configuration;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using SixLabors.ImageSharp.Web.Providers;
 
 namespace ImageSharpCommunity.Providers.Remote;
 
@@ -46,13 +49,15 @@ public static class Helpers
     /// <returns>True if the path is valid for the specified setting, false otherwise.</returns>
     public static bool IsValidForSetting(this Uri uri, RemoteImageProviderSetting setting)
     {
-        return setting.AllowedDomains.Contains("*")
+        return setting.AllowAllDomains
+            || setting.AllowedDomains.Contains("*")
             || setting.AllowedDomains.Contains(uri.Host)
             || setting.AllowedDomains.Any(d =>
             {
                 var pattern = Regex.Escape(d).Replace("\\*", "(.*)");
                 return Regex.IsMatch(uri.Host, $"^{pattern}$");
-            });
+            })
+            || setting.AllowedDomainsRegex.Any(pattern => Regex.IsMatch(uri.Host, pattern));
     }
 
     /// <summary>
@@ -118,7 +123,7 @@ public static class Helpers
     /// <returns>The remote image provider setting that matches the given URI, or null if no matching setting is found.</returns>
     public static RemoteImageProviderSetting? GetMatchingRemoteImageProviderSetting(this Uri uri, RemoteImageProviderOptions options)
     {
-        return options.Settings?.FirstOrDefault(x => uri.IsMatchingRemoteImageProviderSetting(x));
+        return options.Settings?.FirstOrDefault(x => uri.IsValidForSetting(x));
     }
 
     /// <summary>
@@ -130,17 +135,6 @@ public static class Helpers
     public static bool IsMatchingRemoteImageProviderOptions(this Uri uri, RemoteImageProviderOptions options)
     {
         return uri.GetMatchingRemoteImageProviderSetting(options) != null;
-    }
-
-    /// <summary>
-    /// Checks if the given URI matches the specified remote image provider setting.
-    /// </summary>
-    /// <param name="uri">The URI to check.</param>
-    /// <param name="setting">The remote image provider setting to compare against.</param>
-    /// <returns>True if the given URI matches the specified remote image provider setting, false otherwise.</returns>
-    public static bool IsMatchingRemoteImageProviderSetting(this Uri uri, RemoteImageProviderSetting setting)
-    {
-        return setting.AllowedDomains.Any(x => x == "*" || x.Equals(uri.Host, StringComparison.OrdinalIgnoreCase));
     }
 
     /// <summary>
@@ -187,4 +181,29 @@ public static class Helpers
 
         return sb.ToString();
     }
+
+    /// <summary>
+    /// Inserts the given <see cref="IImageProvider"/> at the give index into to the provider collection within the service collection.
+    /// </summary>
+    /// <typeparam name="TProvider">The type of class implementing <see cref="IImageProvider"/> to add.</typeparam>
+    /// <param name="services">The service collection.</param>
+    /// <param name="index">The zero-based index at which the provider should be inserted.</param>
+    /// <returns>The <see cref="IServiceCollection"/>.</returns>
+    public static IServiceCollection InsertImageProvider<TProvider>(this IServiceCollection services, int index)
+        where TProvider : class, IImageProvider
+    {
+        var descriptors = services.Where(x => x.ServiceType == typeof(IImageProvider)).ToList();
+        descriptors.RemoveAll(x => x.GetImplementationType() == typeof(TProvider));
+        descriptors.Insert(index, ServiceDescriptor.Singleton<IImageProvider, TProvider>());
+
+        services.RemoveAll<IImageProvider>();
+        services.TryAddEnumerable(descriptors);
+
+        return services;
+    }
+
+    private static Type? GetImplementationType(this ServiceDescriptor descriptor)
+        => descriptor.ImplementationType
+        ?? descriptor.ImplementationInstance?.GetType()
+        ?? descriptor.ImplementationFactory?.GetType().GenericTypeArguments[1];
 }

@@ -20,19 +20,14 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/skttl/ImageSharpCommunity.Providers.Remote</RepositoryUrl>
     <RootNamespace>ImageSharpCommunity.Providers.Remote</RootNamespace>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <Title>Remote Image Provider for ImageSharp.Web in Umbraco</Title>
     <Version>0.1.0</Version>
   </PropertyGroup>
   
   <ItemGroup>
-    <None Remove="appsettings-schema.umbraco-community-imagesharpremoteimages.json" />
-    <None Remove="buildTransitive\Umbraco.Community.ImageSharpRemoteImages.props" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Content Include="appsettings-schema.umbraco-community-imagesharpremoteimages.json" />
-    <Content Include="buildTransitive\Umbraco.Community.ImageSharpRemoteImages.props" />
+    <Content Include="appsettings-schema.umbraco-community-imagesharpremoteimages.json" PackagePath="" />
+    <Content Include="buildTransitive\**" PackagePath="buildTransitive" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\docs\README_nuget.md" Link="README_nuget.md">
@@ -42,8 +37,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Umbraco.Cms.Web.Website" Version="10.0.0" />
-    <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="10.0.0" />
+    <PackageReference Include="Umbraco.Cms.Imaging.ImageSharp" Version="12.0.0" />
+    <PackageReference Include="Umbraco.Cms.Web.Website" Version="12.0.0" />
+    <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="12.0.0" />
   </ItemGroup>
 
   <ItemGroup>

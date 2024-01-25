@@ -1,7 +1,6 @@
 using ImageSharpCommunity.Providers.Remote;
 using ImageSharpCommunity.Providers.Remote.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SixLabors.ImageSharp.Web.DependencyInjection;
 using Umbraco.Cms.Core.DependencyInjection;
 
 namespace Umbraco.Community.ImageSharpRemoteImages;
@@ -28,10 +27,7 @@ public static class UmbracoBuilderExtensions
 
         builder.ManifestFilters().Append<ImageSharpRemoteImagesManifestFilter>();
 
-        builder.Services
-                .AddImageSharp()
-                // needs to insert it at position 0, because it needs to go before WebRootProvider
-                .InsertProvider<RemoteImageProvider>(0);
+        builder.Services.InsertImageProvider<RemoteImageProvider>(0);
 
         return builder;
     }

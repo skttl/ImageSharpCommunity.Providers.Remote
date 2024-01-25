@@ -1,10 +1,61 @@
-﻿
+
+@using ImageSharpCommunity.Providers.Remote.Configuration
+@using Microsoft.Extensions.Options
+@using Umbraco.Cms.Core.Cache
+@using Umbraco.Cms.Core.Media
 @using Umbraco.Extensions
 @using Umbraco.Cms.Web.Common.PublishedModels;
+@using System.IO;
+@using Umbraco.Cms.Imaging.ImageSharp;
+@inject System.Net.Http.IHttpClientFactory httpClientFactory;
+@inject IImageDimensionExtractor imageDimensionExtractor;
+@inject IOptions<RemoteImageProviderOptions> imageOptions;
+@inject AppCaches appCaches;
+@using ImageSharpCommunity.Providers.Remote;
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Home>
 @{
     Layout = "master.cshtml";
     var backgroundImage = Model.HeroBackgroundImage != null ? Model.HeroBackgroundImage.Url() : String.Empty;
+
+    var format = "";
+    var formats = new Dictionary<string, long>();
+
+    var sourceUrl = new Uri($"https://placekitten.com/100/100");
+    var ourSourceUrl = new Uri("https://our.umbraco.com/media/upload/1bfc4cad-4ab9-4dbb-9c11-c2aba80c48c3/52993696145_431a3ec8bd_k.jpg");
+
+    var ourRemoteUrl = ourSourceUrl.GetRemoteImageProviderUrl(imageOptions.Value);
+    var remoteUrl = sourceUrl.GetRemoteImageProviderUrl(imageOptions.Value);
+    var client = httpClientFactory.CreateClient("test");
+
+
+    // var stream = await client.GetStreamAsync("https://localhost:44324/remote/https://localhost:44324/remote/https://bulldogs.dk/media/oxgn3mtd/odense-bulldogs.png?width=100");
+    // var size = imageDimensionExtractor.GetDimensions(stream);
+    // using (var memoryStream = new MemoryStream())
+    // {
+    //     stream.CopyTo(memoryStream);
+    //     ImageSharpCommunity.Providers.Remote.ImageHelper.TryGetImageSize(memoryStream, out width, out height);
+    // }
+
+    // using (var memoryStream = new MemoryStream())
+    // {
+    //     stream.CopyTo(memoryStream);
+    // }
+}
+
+<h1>@sourceUrl = @remoteUrl</h1>
+<h1>@ourSourceUrl = @ourRemoteUrl</h1>
+@* @if (size.HasValue)
+{
+    <h1>@size.Value.Width x @size.Value.Height</h1>
+} *@
+
+<img src="@remoteUrl?width=100" />
+<img src="@ourRemoteUrl?width=100" />
+@foreach (var f in formats)
+{
+    <div>
+        @f.Key - @f.Value
+    </div>
 }
 <section class="section section--full-height background-image-full overlay overlay--dark section--content-center section--thick-border"
          style="background-image: url('@backgroundImage')">

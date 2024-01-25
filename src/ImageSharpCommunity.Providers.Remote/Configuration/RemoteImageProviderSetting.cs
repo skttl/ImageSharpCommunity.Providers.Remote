@@ -47,5 +47,15 @@ public class RemoteImageProviderSetting
     /// </summary>
     public List<string> AllowedDomains { get; set; } = new List<string>();
 
+    /// <summary>
+    /// Sets allowable domains to process images from.
+    /// </summary>
+    public List<string> AllowedDomainsRegex { get; set; } = new List<string>();
+
+    /// <summary>
+    /// Allows all domains to be processed.
+    /// </summary>
+    public bool AllowAllDomains { get; set; }
+
     internal string ClientDictionaryKey => $"{HttpClientName}_{UserAgent}_{Timeout}_{MaxBytes}";
 }
