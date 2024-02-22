@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Text;
 using System.Text.RegularExpressions;
 using ImageSharpCommunity.Providers.Remote.Configuration;
@@ -10,7 +11,7 @@ namespace ImageSharpCommunity.Providers.Remote;
 
 public static class Helpers
 {
-    private static Dictionary<string, HttpClient> HttpClients { get; } = new Dictionary<string, HttpClient>();
+    private static ConcurrentDictionary<string, HttpClient> HttpClients { get; } = new ConcurrentDictionary<string, HttpClient>();
 
     /// <summary>
     /// Gets the remote URL for a given path, based on the specified options.
@@ -35,7 +36,7 @@ public static class Helpers
         httpClient.Timeout = TimeSpan.FromMilliseconds(setting.Timeout);
         httpClient.MaxResponseContentBufferSize = setting.MaxBytes;
 
-        HttpClients.TryAdd(setting.ClientDictionaryKey, httpClient);
+        HttpClients.AddOrUpdate(setting.ClientDictionaryKey, httpClient, (_, _) => httpClient);
 
         return httpClient;
     }
