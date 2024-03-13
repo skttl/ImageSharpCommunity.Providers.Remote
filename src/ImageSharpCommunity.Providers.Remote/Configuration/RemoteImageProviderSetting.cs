@@ -35,7 +35,7 @@ public class RemoteImageProviderSetting
     /// <summary>
     /// Sets a useragent value for the request. Useful for social networks. See http://www.useragentstring.com/ for available values.
     /// </summary>
-    public string UserAgent { get; set; } = "ImageSharpRemoteProvider/0.1";
+    public string UserAgent { get; set; } = "ImageSharpRemoteProvider/" + typeof(RemoteImageProviderSetting).Assembly.GetName().Version;
 
     /// <summary>
     /// Sets the name of the HttpClient to use when downloading images.

@@ -14,7 +14,7 @@
     <PackageId>Umbraco.Community.ImageSharpRemoteImages</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/skttl/ImageSharp.Community.Providers.Remote</PackageProjectUrl>
-    <PackageReadmeFile>README_nuget.md</PackageReadmeFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>image umbraco umbraco-marketplace</PackageTags>
     <Product>Umbraco.Community.ImageSharpRemoteImages</Product>
     <RepositoryType>git</RepositoryType>
@@ -30,7 +30,7 @@
     <Content Include="buildTransitive\**" PackagePath="buildTransitive" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\docs\README_nuget.md" Link="README_nuget.md">
+    <None Include="..\..\umbraco-marketplace-readme.md" Link="README.md">
       <PackagePath>\</PackagePath>
       <Pack>True</Pack>
     </None>

@@ -14,7 +14,7 @@
     <PackageId>ImageSharpCommunity.Providers.Remote</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/skttl/ImageSharpCommunity.Providers.Remote</PackageProjectUrl>
-    <PackageReadmeFile>README_nuget.md</PackageReadmeFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>image</PackageTags>
     <Product>ImageSharpCommunity.Providers.Remote</Product>
     <RepositoryType>git</RepositoryType>
@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\docs\README_nuget.md">
+    <None Include="..\..\README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
