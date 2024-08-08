@@ -2,6 +2,7 @@ using ImageSharpCommunity.Providers.Remote;
 using ImageSharpCommunity.Providers.Remote.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Umbraco.Cms.Core.DependencyInjection;
+using Umbraco.Cms.Infrastructure.Manifest;
 
 namespace Umbraco.Community.ImageSharpRemoteImages;
 
@@ -9,12 +10,6 @@ public static class UmbracoBuilderExtensions
 {
     public static IUmbracoBuilder AddImageSharpRemoteImages(this IUmbracoBuilder builder, Action<RemoteImageProviderOptions>? defaultOptions = default)
     {
-        // if the Manifest Filter is registred then we assume this has been added before so we don't do it again. 
-        if (builder.ManifestFilters().Has<ImageSharpRemoteImagesManifestFilter>())
-        {
-            return builder;
-        }
-
         // load up the settings. 
         var options = builder.Services.AddOptions<RemoteImageProviderOptions>()
             .Bind(builder.Config.GetSection("Umbraco:Community:ImageSharpRemoteImages"));
@@ -25,7 +20,7 @@ public static class UmbracoBuilderExtensions
         }
         options.ValidateDataAnnotations();
 
-        builder.ManifestFilters().Append<ImageSharpRemoteImagesManifestFilter>();
+        builder.Services.AddSingleton<IPackageManifestReader, ImageSharpRemoteImagesManifestReader>();
 
         builder.Services.InsertImageProvider<RemoteImageProvider>(0);
 

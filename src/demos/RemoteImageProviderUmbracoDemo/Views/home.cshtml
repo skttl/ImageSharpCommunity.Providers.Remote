@@ -20,7 +20,7 @@
     var format = "";
     var formats = new Dictionary<string, long>();
 
-    var sourceUrl = new Uri($"https://placekitten.com/100/100");
+    var sourceUrl = new Uri($"https://www.ecreo.dk/media/e2cmeyrm/regnskab2024.png");
     var ourSourceUrl = new Uri("https://our.umbraco.com/media/upload/1bfc4cad-4ab9-4dbb-9c11-c2aba80c48c3/52993696145_431a3ec8bd_k.jpg");
 
     var ourRemoteUrl = ourSourceUrl.GetRemoteImageProviderUrl(imageOptions.Value);
@@ -72,7 +72,7 @@
 </section>
 
 <section class="section section">
-    @await Html.GetBlockGridHtmlAsync(Model, "bodyText")
+    @await Html.GetBlockGridHtmlAsync(Model.BodyText)
 </section>
 
 <section class="section section--themed">
