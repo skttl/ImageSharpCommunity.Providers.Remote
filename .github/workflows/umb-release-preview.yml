@@ -1,8 +1,8 @@
-name: Release Package
+name: Release Preview Umbraco Package
 on:
   push:
     tags:
-      - "v[0-9]+.[0-9]+.[0-9]+"
+      - "umb-v[0-9]+.[0-9]+.[0-9]+-[a-z]*[0-9][0-9][0-9]"
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,12 +16,6 @@ jobs:
     - name: Cancel job if version is empty
       if: ${{ env.VERSION == '' }}
       run: exit 1
-    - name: Build ImageSharp Package
-      run: dotnet pack ./src/ImageSharpCommunity.Providers.Remote/ImageSharpCommunity.Providers.Remote.csproj /p:NuGetVersion=${VERSION} /p:Version=${VERSION} --output . --configuration Release
-    - name: Pack
-      run: dotnet pack ./src/ImageSharpCommunity.Providers.Remote/ImageSharpCommunity.Providers.Remote.csproj /p:NuGetVersion=${VERSION} /p:Version=${VERSION} --output . --configuration Release --no-build
-    - name: Push to NuGet
-      run: dotnet nuget push **\ImageSharpCommunity.Providers.Remote.${VERSION}.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
     - name: Build Umbraco Package
       run: dotnet pack ./src/Umbraco.Community.ImageSharpRemoteImages/Umbraco.Community.ImageSharpRemoteImages.csproj /p:NuGetVersion=${VERSION} /p:Version=${VERSION} --output . --configuration Release
     - name: Pack
