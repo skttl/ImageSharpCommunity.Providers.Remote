@@ -36,7 +36,12 @@ public class RemoteImageResolver : IImageResolver
             _logger.LogDebug("LastModified header missing from {Url}", _url);
         }
 
-        return new ImageMetadata(response.Content.Headers.LastModified.GetValueOrDefault().UtcDateTime, response.Content.Headers.ContentLength.GetValueOrDefault());
+        if (response.Headers.CacheControl?.MaxAge is null)
+        {
+            _logger.LogDebug("MaxAge header is null from {Url}", _url);
+        }
+
+        return new ImageMetadata(response.Content.Headers.LastModified.GetValueOrDefault().UtcDateTime, (response.Headers.CacheControl?.MaxAge).GetValueOrDefault(), response.Content.Headers.ContentLength.GetValueOrDefault());
     }
 
     public async Task<Stream> OpenReadAsync()
