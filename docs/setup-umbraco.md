@@ -24,10 +24,11 @@ A configuration can look like this:
         ]
       }
     }
+  }
 }
 ```
 
-By default, no domains is allowed, so you have to configure your desired `RemoteImageProviderOptions` in order to use this provider.
+By default, no domains are allowed, so you have to configure your desired `RemoteImageProviderOptions` in order to use this provider.
 
 - [Configuration](https://github.com/skttl/ImageSharpCommunity.Providers.Remote/blob/main/docs/configuration.md)
 - [Usage](https://github.com/skttl/ImageSharpCommunity.Providers.Remote/blob/main/docs/usage.md)
