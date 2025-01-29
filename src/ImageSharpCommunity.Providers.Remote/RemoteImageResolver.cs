@@ -9,13 +9,15 @@ public class RemoteImageResolver : IImageResolver
     private readonly string _url;
     private readonly RemoteImageProviderSetting _setting;
     private readonly ILogger<RemoteImageResolver> _logger;
+    private readonly RemoteImageProviderOptions _options;
 
-    public RemoteImageResolver(IHttpClientFactory clientFactory, string url, RemoteImageProviderSetting setting, ILogger<RemoteImageResolver> logger)
+    public RemoteImageResolver(IHttpClientFactory clientFactory, string url, RemoteImageProviderSetting setting, ILogger<RemoteImageResolver> logger, RemoteImageProviderOptions options)
     {
         _clientFactory = clientFactory;
         _url = url;
         _setting = setting;
         _logger = logger;
+        _options = options;
     }
 
     public async Task<ImageMetadata> GetMetaDataAsync()
@@ -38,10 +40,14 @@ public class RemoteImageResolver : IImageResolver
 
         if (response.Headers.CacheControl?.MaxAge is null)
         {
-            _logger.LogDebug("MaxAge header is null from {Url}", _url);
+            _logger.LogDebug("MaxAge header is null from {Url}, falling back to configured FallbackMaxAge {FallbackMaxAge}", _url, _options.FallbackMaxAge);
         }
 
-        return new ImageMetadata(response.Content.Headers.LastModified.GetValueOrDefault().UtcDateTime, (response.Headers.CacheControl?.MaxAge).GetValueOrDefault(), response.Content.Headers.ContentLength.GetValueOrDefault());
+        return new ImageMetadata(
+            response.Content.Headers.LastModified.GetValueOrDefault().UtcDateTime,
+            response.Headers.CacheControl?.MaxAge ?? _options.FallbackMaxAge,
+            response.Content.Headers.ContentLength.GetValueOrDefault()
+        );
     }
 
     public async Task<Stream> OpenReadAsync()

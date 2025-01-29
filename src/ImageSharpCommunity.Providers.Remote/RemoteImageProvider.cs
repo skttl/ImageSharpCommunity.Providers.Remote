@@ -57,7 +57,7 @@ public class RemoteImageProvider : IImageProvider
         else
         {
             _logger.LogDebug("Found matching remote image provider setting for path: {path}", context.Request.Path);
-            return Task.FromResult((IImageResolver?)new RemoteImageResolver(_clientFactory, url, options, _resolverLogger));
+            return Task.FromResult((IImageResolver?)new RemoteImageResolver(_clientFactory, url, options, _resolverLogger, _options));
         }
     }
     private bool IsMatch(HttpContext context)
@@ -85,7 +85,7 @@ public class RemoteImageProvider : IImageProvider
 
         if (response.Headers.CacheControl?.MaxAge is not null)
         {
-            _cache.Set(nameof(RemoteImageProvider) + uri, response.IsSuccessStatusCode, response.Headers.CacheControl.MaxAge ?? TimeSpan.Zero);
+            _cache.Set(nameof(RemoteImageProvider) + uri, response.IsSuccessStatusCode, response.Headers.CacheControl.MaxAge ?? _options.FallbackMaxAge);
         }
 
         return response.IsSuccessStatusCode;
