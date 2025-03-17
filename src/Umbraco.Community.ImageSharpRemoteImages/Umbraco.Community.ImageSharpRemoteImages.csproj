@@ -37,9 +37,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Umbraco.Cms.Imaging.ImageSharp" Version="14.0.0" />
-    <PackageReference Include="Umbraco.Cms.Web.Website" Version="14.0.0" />
-    <PackageReference Include="ImageSharpCommunity.Providers.Remote" Version="1.0.1" />
+    <PackageReference Include="Umbraco.Cms.Imaging.ImageSharp" Version="15.0.0" />
+    <PackageReference Include="Umbraco.Cms.Web.Website" Version="15.0.0" />
+    <PackageReference Include="ImageSharpCommunity.Providers.Remote" Version="1.1.0" />
   </ItemGroup>
 
 </Project>
