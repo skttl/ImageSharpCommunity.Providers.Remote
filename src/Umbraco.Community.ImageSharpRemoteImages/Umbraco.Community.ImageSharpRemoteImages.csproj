@@ -37,10 +37,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Umbraco.Cms.Imaging.ImageSharp" Version="12.0.0" />
-    <PackageReference Include="Umbraco.Cms.Web.Website" Version="12.0.0" />
-    <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="12.0.0" />
-    <PackageReference Include="ImageSharpCommunity.Providers.Remote" Version="1.0.1" />
+    <PackageReference Include="Umbraco.Cms.Imaging.ImageSharp" Version="13.0.0" />
+    <PackageReference Include="Umbraco.Cms.Web.Website" Version="13.0.0" />
+    <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="13.0.0" />
+    <PackageReference Include="ImageSharpCommunity.Providers.Remote" Version="1.1.0" />
   </ItemGroup>
 
 </Project>
