@@ -4,6 +4,8 @@ The `RemoteImageProviderOptions` class provides the following configuration opti
 
 - `Settings`: A list of the different allowed sources for images. 
 
+- `FallbackMaxAge`: Specifies a fallback max age for the image being loaded. Used if the server does not return a cache-control header. By default, it is set to `0.01:00:00` (1 hour).
+- 
 Each setting (`RemoteImageProviderSetting`) provides the following configuration options:
 
 - `Prefix`: Specified in the constructor, and defines the local path to prefix all remote image requests with. For example, setting this to `/remote` allows requests like `/remote/https://test.com/test.png` to pass through this provider.
@@ -25,6 +27,8 @@ Each setting (`RemoteImageProviderSetting`) provides the following configuration
 - `AllowAllDomains`: Boolean value. If set to true, all domains is allowed to process.
 
 - `AdditionalOptions`: Allows specifying additional `RemoteImageProviderOptions` instances. This can be useful when you have multiple configurations with different prefixes or other settings.
+
+- `VerifyUrl`: Boolean value. If set to true, the URL will be verified before downloading the image. This can be useful to prevent downloading and processing images returning 404 or other error codes. By default, it is set to `truee`.`
 
 Please note that these options provide customization and control over how remote images are loaded and processed. You can adjust these options according to your specific requirements.
 

@@ -57,5 +57,10 @@ public class RemoteImageProviderSetting
     /// </summary>
     public bool AllowAllDomains { get; set; }
 
+    /// <summary>
+    /// Verify that the input url returns a succesful status code.
+    /// </summary>
+    public bool VerifyUrl { get; set; } = true;
+
     internal string ClientDictionaryKey => $"{HttpClientName}_{UserAgent}_{Timeout}_{MaxBytes}";
 }
