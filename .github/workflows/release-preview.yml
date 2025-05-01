@@ -16,6 +16,10 @@ jobs:
     - name: Cancel job if version is empty
       if: ${{ env.VERSION == '' }}
       run: exit 1
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
     - name: Build ImageSharp Package
       run: dotnet pack ./src/ImageSharpCommunity.Providers.Remote/ImageSharpCommunity.Providers.Remote.csproj /p:NuGetVersion=${VERSION} /p:Version=${VERSION} --output . --configuration Release
     - name: Pack
