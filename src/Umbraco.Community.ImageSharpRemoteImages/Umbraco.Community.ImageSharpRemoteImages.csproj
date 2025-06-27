@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  
   <PropertyGroup>
     <Authors>Søren Kottal</Authors>
     <Copyright>$([System.DateTime]::UtcNow.ToString(`yyyy`)) © Søren Kottal</Copyright>
@@ -24,9 +23,11 @@
     <Title>Remote Image Provider for ImageSharp.Web in Umbraco</Title>
     <Version>1.0.0</Version>
   </PropertyGroup>
-  
   <ItemGroup>
-    <Content Include="appsettings-schema.umbraco-community-imagesharpremoteimages.json" PackagePath="" />
+    <Content
+      Include="appsettings-schema.umbraco-community-imagesharpremoteimages.json"
+      PackagePath=""
+    />
     <Content Include="buildTransitive\**" PackagePath="buildTransitive" />
   </ItemGroup>
   <ItemGroup>
@@ -35,11 +36,9 @@
       <Pack>True</Pack>
     </None>
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="Umbraco.Cms.Imaging.ImageSharp" Version="15.0.0" />
-    <PackageReference Include="Umbraco.Cms.Web.Website" Version="15.0.0" />
+    <PackageReference Include="Umbraco.Cms.Imaging.ImageSharp" Version="16.0.0" />
+    <PackageReference Include="Umbraco.Cms.Web.Website" Version="16.0.0" />
     <PackageReference Include="ImageSharpCommunity.Providers.Remote" Version="1.1.0" />
   </ItemGroup>
-
 </Project>
