@@ -19,7 +19,7 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/skttl/ImageSharpCommunity.Providers.Remote</RepositoryUrl>
     <RootNamespace>ImageSharpCommunity.Providers.Remote</RootNamespace>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Title>Remote Image Provider for ImageSharp.Web in Umbraco</Title>
     <Version>1.0.0</Version>
   </PropertyGroup>
@@ -37,8 +37,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Umbraco.Cms.Imaging.ImageSharp" Version="16.0.0" />
-    <PackageReference Include="Umbraco.Cms.Web.Website" Version="16.0.0" />
+    <PackageReference Include="Umbraco.Cms.Imaging.ImageSharp" Version="17.0.0" />
+    <PackageReference Include="Umbraco.Cms.Web.Website" Version="17.0.0" />
     <PackageReference Include="ImageSharpCommunity.Providers.Remote" Version="1.1.0" />
   </ItemGroup>
 </Project>

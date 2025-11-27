@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Umbraco.Cms" Version="14.0.0" />
-    <PackageReference Include="Umbraco.TheStarterKit" Version="14.0.0" />
+    <PackageReference Include="Umbraco.Cms" Version="17.0.0" />
+    <PackageReference Include="Umbraco.TheStarterKit" Version="17.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,5 +30,5 @@
     <RazorCompileOnBuild>false</RazorCompileOnBuild>
     <RazorCompileOnPublish>false</RazorCompileOnPublish>
   </PropertyGroup>
-  
+
 </Project>
