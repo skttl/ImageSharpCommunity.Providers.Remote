@@ -5,7 +5,9 @@ The `RemoteImageProviderOptions` class provides the following configuration opti
 - `Settings`: A list of the different allowed sources for images. 
 
 - `FallbackMaxAge`: Specifies a fallback max age for the image being loaded. Used if the server does not return a cache-control header. By default, it is set to `0.01:00:00` (1 hour).
-- 
+
+- `QueryParameterMarker`: A query string parameter name used as a divider in the incoming request URL. Parameters appearing **before** this marker are eligible to be forwarded to the remote URL (subject to `PassThroughParameters`). Parameters appearing **after** this marker are ignored for remote forwarding and remain available for ImageSharp processing. Set to `null` or empty to disable. Default is `"_iscpr"`.
+
 Each setting (`RemoteImageProviderSetting`) provides the following configuration options:
 
 - `Prefix`: Specified in the constructor, and defines the local path to prefix all remote image requests with. For example, setting this to `/remote` allows requests like `/remote/https://test.com/test.png` to pass through this provider.
@@ -28,7 +30,11 @@ Each setting (`RemoteImageProviderSetting`) provides the following configuration
 
 - `AdditionalOptions`: Allows specifying additional `RemoteImageProviderOptions` instances. This can be useful when you have multiple configurations with different prefixes or other settings.
 
-- `VerifyUrl`: Boolean value. If set to true, the URL will be verified before downloading the image. This can be useful to prevent downloading and processing images returning 404 or other error codes. By default, it is set to `truee`.`
+- `VerifyUrl`: Boolean value. If set to true, the URL will be verified before downloading the image. This can be useful to prevent downloading and processing images returning 404 or other error codes. By default, it is set to `true`.
+
+- `PassThroughAllParameters`: Boolean value. If set to true, all eligible query string parameters from the incoming request are forwarded to the remote URL. When true, `PassThroughParameters` is ignored. Default is false.
+
+- `PassThroughParameters`: A list of query string parameter names from the incoming request that should be forwarded to the remote URL. Ignored when `PassThroughAllParameters` is true. Empty by default (forward none).
 
 Please note that these options provide customization and control over how remote images are loaded and processed. You can adjust these options according to your specific requirements.
 

@@ -62,5 +62,17 @@ public class RemoteImageProviderSetting
     /// </summary>
     public bool VerifyUrl { get; set; } = true;
 
+    /// <summary>
+    /// If set to true, all eligible query string parameters from the incoming request are forwarded to the remote URL.
+    /// When true, <see cref="PassThroughParameters"/> is ignored.
+    /// </summary>
+    public bool PassThroughAllParameters { get; set; }
+
+    /// <summary>
+    /// Query string parameter names from the incoming request that should be passed through to the remote URL.
+    /// Ignored when <see cref="PassThroughAllParameters"/> is true. Empty by default (forward none).
+    /// </summary>
+    public List<string> PassThroughParameters { get; set; } = new List<string>();
+
     internal string ClientDictionaryKey => $"{HttpClientName}_{UserAgent}_{Timeout}_{MaxBytes}";
 }

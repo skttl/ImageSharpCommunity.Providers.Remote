@@ -38,7 +38,7 @@ public class RemoteImageProvider : IImageProvider
     {
         return
             context.Request.Path.GetMatchingRemoteImageProviderSetting(_options) is RemoteImageProviderSetting setting
-            && context.Request.Path.GetSourceUrlForRemoteImageProviderUrl(_options) is string url
+            && context.Request.Path.GetSourceUrlForRemoteImageProviderUrl(_options, context.Request.QueryString) is string url
             && Uri.TryCreate(url, UriKind.Absolute, out Uri? uri) && uri != null
             && uri.IsValidForSetting(setting)
             && UrlReturnsSuccess(setting, uri);
@@ -47,7 +47,7 @@ public class RemoteImageProvider : IImageProvider
     public Task<IImageResolver?> GetAsync(HttpContext context)
     {
         if (
-            context.Request.Path.GetSourceUrlForRemoteImageProviderUrl(_options) is not string url
+            context.Request.Path.GetSourceUrlForRemoteImageProviderUrl(_options, context.Request.QueryString) is not string url
             || context.Request.Path.GetMatchingRemoteImageProviderSetting(_options) is not RemoteImageProviderSetting options
         )
         {

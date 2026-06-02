@@ -66,8 +66,9 @@ public static class Helpers
     /// </summary>
     /// <param name="path">The path for which to retrieve the remote URL.</param>
     /// <param name="options">The options containing the remote image provider settings.</param>
+    /// <param name="queryString">Optional raw query string from the incoming request, used to pass through parameters defined in the matching setting.</param>
     /// <returns>The remote URL for the given path, or null if no matching remote image provider setting is found.</returns>
-    public static string? GetSourceUrlForRemoteImageProviderUrl(this PathString path, RemoteImageProviderOptions options)
+    public static string? GetSourceUrlForRemoteImageProviderUrl(this PathString path, RemoteImageProviderOptions options, QueryString queryString = default)
     {
         if (
             !path.HasValue
@@ -80,7 +81,40 @@ public static class Helpers
         }
 
         var remoteUrl = setting.RemoteUrlPrefix + path.Value?[(prefix.Length + 1)..];
-        return remoteUrl?.Replace(" ", "%20");
+        remoteUrl = remoteUrl?.Replace(" ", "%20");
+
+        if (remoteUrl is not null && queryString.HasValue && (setting.PassThroughAllParameters || setting.PassThroughParameters.Count > 0))
+        {
+            var rawQuery = queryString.Value!.TrimStart('?');
+            var allParams = rawQuery
+                .Split('&', StringSplitOptions.RemoveEmptyEntries)
+                .Select(p =>
+                {
+                    var eq = p.IndexOf('=');
+                    return eq >= 0
+                        ? (Key: Uri.UnescapeDataString(p[..eq]), Value: (string?)Uri.UnescapeDataString(p[(eq + 1)..]))
+                        : (Key: Uri.UnescapeDataString(p), Value: (string?)null);
+                });
+
+            var markerKey = options.QueryParameterMarker;
+            var eligibleParams = !string.IsNullOrEmpty(markerKey)
+                ? allParams.TakeWhile(p => !string.Equals(p.Key, markerKey, StringComparison.OrdinalIgnoreCase))
+                : allParams;
+
+            var passThroughSet = new HashSet<string>(setting.PassThroughParameters, StringComparer.OrdinalIgnoreCase);
+            var passThrough = string.Join("&", eligibleParams
+                .Where(p => setting.PassThroughAllParameters || passThroughSet.Contains(p.Key))
+                .Select(p => p.Value is not null
+                    ? $"{Uri.EscapeDataString(p.Key)}={Uri.EscapeDataString(p.Value)}"
+                    : Uri.EscapeDataString(p.Key)));
+
+            if (!string.IsNullOrEmpty(passThrough))
+            {
+                remoteUrl += (remoteUrl.Contains('?') ? "&" : "?") + passThrough;
+            }
+        }
+
+        return remoteUrl;
     }
 
     /// <summary>
@@ -156,7 +190,7 @@ public static class Helpers
         var sb = new StringBuilder();
         sb.Append(setting.Prefix);
 
-        var path = uri.ToString();
+        var path = uri.AbsolutePath;
 
         if (
             string.IsNullOrWhiteSpace(setting.RemoteUrlPrefix) == false
@@ -164,13 +198,10 @@ public static class Helpers
             && remoteUri != null
         )
         {
-            path = uri.PathAndQuery;
-            if (uri.PathAndQuery.StartsWith(remoteUri.PathAndQuery, StringComparison.OrdinalIgnoreCase))
+            if (path.StartsWith(remoteUri.AbsolutePath, StringComparison.OrdinalIgnoreCase))
             {
-                path = uri.PathAndQuery[remoteUri.PathAndQuery.Length..];
+                path = path[remoteUri.AbsolutePath.TrimEnd('/').Length..];
             }
-
-
         }
 
         if (setting.Prefix.EndsWith("/") == false && path.StartsWith("/") == false)
@@ -179,6 +210,44 @@ public static class Helpers
         }
 
         sb.Append(path);
+
+        var rawQuery = uri.Query.TrimStart('?');
+        if (!string.IsNullOrEmpty(rawQuery))
+        {
+            var allParams = rawQuery
+                .Split('&', StringSplitOptions.RemoveEmptyEntries)
+                .Select(p =>
+                {
+                    var eq = p.IndexOf('=');
+                    return eq >= 0
+                        ? (Key: Uri.UnescapeDataString(p[..eq]), Value: (string?)Uri.UnescapeDataString(p[(eq + 1)..]))
+                        : (Key: Uri.UnescapeDataString(p), Value: (string?)null);
+                });
+
+            var passThroughSet = setting.PassThroughAllParameters
+                ? null
+                : new HashSet<string>(setting.PassThroughParameters, StringComparer.OrdinalIgnoreCase);
+
+            var kept = allParams
+                .Where(p => passThroughSet is null || passThroughSet.Contains(p.Key))
+                .Select(p => p.Value is not null
+                    ? $"{Uri.EscapeDataString(p.Key)}={Uri.EscapeDataString(p.Value)}"
+                    : Uri.EscapeDataString(p.Key))
+                .ToList();
+
+            if (kept.Count > 0)
+            {
+                sb.Append('?');
+                sb.Append(string.Join("&", kept));
+            }
+        }
+
+        var marker = options.QueryParameterMarker;
+        if (!string.IsNullOrEmpty(marker))
+        {
+            sb.Append(sb.ToString().Contains('?') ? "&" : "?");
+            sb.Append(Uri.EscapeDataString(marker));
+        }
 
         return sb.ToString();
     }
