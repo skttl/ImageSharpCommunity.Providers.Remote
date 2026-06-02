@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+## [1.3.0]
+
+### Added
+
+- **`RemoteImageProviderCacheKey`** — new `ICacheKey` implementation that extends the default ImageSharp.Web cache key with pass-through query parameters, ensuring requests with different remote-bound values (e.g. `?id=1` vs `?id=2`) produce distinct cache entries.
+- **`SetRemoteImageProviderCacheKey()`** — extension method on both `IImageSharpBuilder` and `IServiceCollection` for manual registration of the cache key.
+- **`GetRemoteImageProviderUrl` updated** — when building a local URL from a remote URI (e.g. in Razor views), query parameters are now filtered through `PassThrough(All)Parameters` and the `QueryParameterMarker` is automatically appended.
+
+### Changed
+
+- `InsertImageProvider<RemoteImageProvider>()` now automatically registers `RemoteImageProviderCacheKey`. No manual setup required when using pass-through parameters.
+
+---
+
 ## [1.2.0]
 
 ### Added
@@ -39,6 +55,18 @@ All notable changes to this project will be documented in this file.
 - Initial stable release.
 
 # Umbraco package changelog
+
+## [Unreleased]
+
+## [17.2.0]
+
+- Upgrade dependencies for Umbraco 17.
+
+### Changed
+
+- `AddImageSharpRemoteImages()` now automatically registers `RemoteImageProviderCacheKey`. No manual setup required when using pass-through parameters.
+
+---
 
 ## [17.1.0]
 

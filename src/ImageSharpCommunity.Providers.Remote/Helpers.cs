@@ -5,6 +5,8 @@ using ImageSharpCommunity.Providers.Remote.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using SixLabors.ImageSharp.Web.Caching;
+using SixLabors.ImageSharp.Web.DependencyInjection;
 using SixLabors.ImageSharp.Web.Providers;
 
 namespace ImageSharpCommunity.Providers.Remote;
@@ -253,6 +255,26 @@ public static class Helpers
     }
 
     /// <summary>
+    /// Registers <see cref="RemoteImageProviderCacheKey"/> as the <see cref="ICacheKey"/> implementation.
+    /// This ensures requests with different pass-through query parameters produce distinct cache entries.
+    /// Call this when using <see cref="RemoteImageProviderSetting.PassThroughParameters"/> or
+    /// <see cref="RemoteImageProviderSetting.PassThroughAllParameters"/>.
+    /// </summary>
+    /// <param name="builder">The ImageSharp builder.</param>
+    /// <returns>The <see cref="IImageSharpBuilder"/> to allow chaining.</returns>
+    public static IImageSharpBuilder SetRemoteImageProviderCacheKey(this IImageSharpBuilder builder)
+    {
+        builder.Services.SetRemoteImageProviderCacheKey();
+        return builder;
+    }
+
+    public static IServiceCollection SetRemoteImageProviderCacheKey(this IServiceCollection services)
+    {
+        services.AddSingleton<ICacheKey, RemoteImageProviderCacheKey>();
+        return services;
+    }
+
+    /// <summary>
     /// Inserts the given <see cref="IImageProvider"/> at the give index into to the provider collection within the service collection.
     /// </summary>
     /// <typeparam name="TProvider">The type of class implementing <see cref="IImageProvider"/> to add.</typeparam>
@@ -268,6 +290,11 @@ public static class Helpers
 
         services.RemoveAll<IImageProvider>();
         services.TryAddEnumerable(descriptors);
+
+        if (typeof(TProvider) == typeof(RemoteImageProvider))
+        {
+            services.SetRemoteImageProviderCacheKey();
+        }
 
         return services;
     }

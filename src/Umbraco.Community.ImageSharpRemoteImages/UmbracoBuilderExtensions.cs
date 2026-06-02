@@ -10,7 +10,7 @@ public static class UmbracoBuilderExtensions
 {
     public static IUmbracoBuilder AddImageSharpRemoteImages(this IUmbracoBuilder builder, Action<RemoteImageProviderOptions>? defaultOptions = default)
     {
-        // load up the settings. 
+        // load up the settings.
         var options = builder.Services.AddOptions<RemoteImageProviderOptions>()
             .Bind(builder.Config.GetSection("Umbraco:Community:ImageSharpRemoteImages"));
 
