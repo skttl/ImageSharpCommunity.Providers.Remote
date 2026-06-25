@@ -1,6 +1,7 @@
 using ImageSharpCommunity.Providers.Remote.Configuration;
 using Microsoft.Extensions.Logging;
 using SixLabors.ImageSharp.Web.Resolvers;
+
 namespace ImageSharpCommunity.Providers.Remote;
 
 public class RemoteImageResolver : IImageResolver
@@ -11,7 +12,13 @@ public class RemoteImageResolver : IImageResolver
     private readonly ILogger<RemoteImageResolver> _logger;
     private readonly RemoteImageProviderOptions _options;
 
-    public RemoteImageResolver(IHttpClientFactory clientFactory, string url, RemoteImageProviderSetting setting, ILogger<RemoteImageResolver> logger, RemoteImageProviderOptions options)
+    public RemoteImageResolver(
+        IHttpClientFactory clientFactory,
+        string url,
+        RemoteImageProviderSetting setting,
+        ILogger<RemoteImageResolver> logger,
+        RemoteImageProviderOptions options
+    )
     {
         _clientFactory = clientFactory;
         _url = url;
@@ -26,7 +33,10 @@ public class RemoteImageResolver : IImageResolver
 
         var client = _clientFactory.GetRemoteImageProviderHttpClient(_setting);
 
-        var response = await client.SendAsync(new HttpRequestMessage(HttpMethod.Head, _url), HttpCompletionOption.ResponseHeadersRead);
+        var response = await client.SendAsync(
+            new HttpRequestMessage(HttpMethod.Head, _url),
+            HttpCompletionOption.ResponseHeadersRead
+        );
 
         if (!response.Content.Headers.ContentLength.HasValue)
         {
@@ -40,7 +50,11 @@ public class RemoteImageResolver : IImageResolver
 
         if (response.Headers.CacheControl?.MaxAge is null)
         {
-            _logger.LogDebug("MaxAge header is null from {Url}, falling back to configured FallbackMaxAge {FallbackMaxAge}", _url, _options.FallbackMaxAge);
+            _logger.LogDebug(
+                "MaxAge header is null from {Url}, falling back to configured FallbackMaxAge {FallbackMaxAge}",
+                _url,
+                _options.FallbackMaxAge
+            );
         }
 
         return new ImageMetadata(

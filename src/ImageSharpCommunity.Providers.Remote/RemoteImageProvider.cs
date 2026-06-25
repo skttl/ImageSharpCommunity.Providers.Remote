@@ -16,7 +16,13 @@ public class RemoteImageProvider : IImageProvider
     private readonly ILogger<RemoteImageResolver> _resolverLogger;
     private readonly IMemoryCache _cache;
 
-    public RemoteImageProvider(IHttpClientFactory clientFactory, IOptions<RemoteImageProviderOptions> options, ILogger<RemoteImageProvider> logger, ILogger<RemoteImageResolver> resolverLogger, IMemoryCache cache)
+    public RemoteImageProvider(
+        IHttpClientFactory clientFactory,
+        IOptions<RemoteImageProviderOptions> options,
+        ILogger<RemoteImageProvider> logger,
+        ILogger<RemoteImageResolver> resolverLogger,
+        IMemoryCache cache
+    )
     {
         _clientFactory = clientFactory;
         _options = options.Value;
@@ -36,40 +42,112 @@ public class RemoteImageProvider : IImageProvider
 
     public bool IsValidRequest(HttpContext context)
     {
-        return
-            context.Request.Path.GetMatchingRemoteImageProviderSetting(_options) is RemoteImageProviderSetting setting
-            && context.Request.Path.GetSourceUrlForRemoteImageProviderUrl(_options, context.Request.QueryString) is string url
-            && Uri.TryCreate(url, UriKind.Absolute, out Uri? uri) && uri != null
-            && uri.IsValidForSetting(setting)
-            && UrlReturnsSuccess(setting, uri);
+        if (
+            context.Request.Path.GetMatchingRemoteImageProviderSetting(_options)
+            is not RemoteImageProviderSetting setting
+        )
+        {
+            _logger.LogDebug(
+                "No matching remote image provider setting found for path: {path}",
+                context.Request.Path
+            );
+            return false;
+        }
+        if (
+            context.Request.Path.GetSourceUrlForRemoteImageProviderUrl(
+                _options,
+                context.Request.QueryString
+            )
+            is not string url
+        )
+        {
+            _logger.LogDebug("Source url for path {path} returned null", context.Request.Path);
+            return false;
+        }
+        if (!Uri.TryCreate(url, UriKind.Absolute, out Uri? uri) || uri is null)
+        {
+            _logger.LogDebug(
+                "Source url ({url}) for path {path} could not be parsed",
+                url,
+                context.Request.Path
+            );
+            return false;
+        }
+        if (!uri.IsValidForSetting(setting))
+        {
+            _logger.LogDebug(
+                "Source url ({url}) for path {path} is not valid for setting with prefix {setting}",
+                url,
+                context.Request.Path,
+                setting.Prefix
+            );
+            return false;
+        }
+        if (!UrlReturnsSuccess(setting, uri))
+        {
+            _logger.LogDebug(
+                "Source url ({url}) for path {path} did not return success",
+                url,
+                context.Request.Path
+            );
+            return false;
+        }
+
+        return true;
     }
 
     public Task<IImageResolver?> GetAsync(HttpContext context)
     {
         if (
-            context.Request.Path.GetSourceUrlForRemoteImageProviderUrl(_options, context.Request.QueryString) is not string url
-            || context.Request.Path.GetMatchingRemoteImageProviderSetting(_options) is not RemoteImageProviderSetting options
+            context.Request.Path.GetSourceUrlForRemoteImageProviderUrl(
+                _options,
+                context.Request.QueryString
+            )
+                is not string url
+            || context.Request.Path.GetMatchingRemoteImageProviderSetting(_options)
+                is not RemoteImageProviderSetting options
         )
         {
-            _logger.LogDebug("No matching remote image provider setting found for path: {path}", context.Request.Path);
+            _logger.LogDebug(
+                "No matching remote image provider setting found for path: {path}",
+                context.Request.Path
+            );
             return Task.FromResult((IImageResolver?)null);
         }
         else
         {
-            _logger.LogDebug("Found matching remote image provider setting for path: {path}", context.Request.Path);
-            return Task.FromResult((IImageResolver?)new RemoteImageResolver(_clientFactory, url, options, _resolverLogger, _options));
+            _logger.LogDebug(
+                "Found matching remote image provider setting for path: {path}",
+                context.Request.Path
+            );
+            return Task.FromResult(
+                (IImageResolver?)
+                    new RemoteImageResolver(_clientFactory, url, options, _resolverLogger, _options)
+            );
         }
     }
+
     private bool IsMatch(HttpContext context)
     {
-        return context.Request.Path.GetMatchingRemoteImageProviderSetting(_options) != null;
+        if (context.Request.Path.GetMatchingRemoteImageProviderSetting(_options) is null)
+        {
+            _logger.LogInformation(
+                "No matching remote image provider setting found for path: {path}",
+                context.Request.Path
+            );
+            return false;
+        }
+        return true;
     }
 
     private bool UrlReturnsSuccess(RemoteImageProviderSetting setting, Uri uri)
     {
         if (setting.VerifyUrl == false)
         {
-            _logger.LogDebug("Skipping verification of URL {Url} as VerifyUrl is set to false", uri);
+            _logger.LogDebug(
+                "Skipping verification of URL {Url} as VerifyUrl is set to false",
+                uri
+            );
             return true;
         }
 
@@ -85,7 +163,16 @@ public class RemoteImageProvider : IImageProvider
 
         if (response.Headers.CacheControl?.MaxAge is not null)
         {
-            _cache.Set(nameof(RemoteImageProvider) + uri, response.IsSuccessStatusCode, response.Headers.CacheControl.MaxAge ?? _options.FallbackMaxAge);
+            _logger.LogDebug(
+                "Setting cache for URL {Url} with MaxAge {MaxAge}",
+                uri,
+                response.Headers.CacheControl.MaxAge
+            );
+            _cache.Set(
+                nameof(RemoteImageProvider) + uri,
+                response.IsSuccessStatusCode,
+                response.Headers.CacheControl.MaxAge ?? _options.FallbackMaxAge
+            );
         }
 
         return response.IsSuccessStatusCode;

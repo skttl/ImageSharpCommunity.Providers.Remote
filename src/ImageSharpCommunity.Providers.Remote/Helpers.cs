@@ -13,7 +13,8 @@ namespace ImageSharpCommunity.Providers.Remote;
 
 public static class Helpers
 {
-    private static ConcurrentDictionary<string, HttpClient> HttpClients { get; } = new ConcurrentDictionary<string, HttpClient>();
+    private static ConcurrentDictionary<string, HttpClient> HttpClients { get; } =
+        new ConcurrentDictionary<string, HttpClient>();
 
     /// <summary>
     /// Gets the remote URL for a given path, based on the specified options.
@@ -21,9 +22,15 @@ public static class Helpers
     /// <param name="path">The path for which to retrieve the remote URL.</param>
     /// <param name="options">The options containing the remote image provider settings.</param>
     /// <returns>The remote URL for the given path, or null if no matching remote image provider setting is found.</returns>
-    public static HttpClient GetRemoteImageProviderHttpClient(this IHttpClientFactory factory, RemoteImageProviderSetting setting)
+    public static HttpClient GetRemoteImageProviderHttpClient(
+        this IHttpClientFactory factory,
+        RemoteImageProviderSetting setting
+    )
     {
-        if (HttpClients.TryGetValue(setting.ClientDictionaryKey, out HttpClient? HttpClient) && HttpClient is not null)
+        if (
+            HttpClients.TryGetValue(setting.ClientDictionaryKey, out HttpClient? HttpClient)
+            && HttpClient is not null
+        )
         {
             return HttpClient;
         }
@@ -70,14 +77,19 @@ public static class Helpers
     /// <param name="options">The options containing the remote image provider settings.</param>
     /// <param name="queryString">Optional raw query string from the incoming request, used to pass through parameters defined in the matching setting.</param>
     /// <returns>The remote URL for the given path, or null if no matching remote image provider setting is found.</returns>
-    public static string? GetSourceUrlForRemoteImageProviderUrl(this PathString path, RemoteImageProviderOptions options, QueryString queryString = default)
+    public static string? GetSourceUrlForRemoteImageProviderUrl(
+        this PathString path,
+        RemoteImageProviderOptions options,
+        QueryString queryString = default
+    )
     {
         if (
             !path.HasValue
-            || path.GetMatchingRemoteImageProviderSetting(options) is not RemoteImageProviderSetting setting
+            || path.GetMatchingRemoteImageProviderSetting(options)
+                is not RemoteImageProviderSetting setting
             || setting.Prefix is not string prefix
             || path.Value.Length <= prefix.Length
-            )
+        )
         {
             return null;
         }
@@ -85,7 +97,11 @@ public static class Helpers
         var remoteUrl = setting.RemoteUrlPrefix + path.Value?[(prefix.Length + 1)..];
         remoteUrl = remoteUrl?.Replace(" ", "%20");
 
-        if (remoteUrl is not null && queryString.HasValue && (setting.PassThroughAllParameters || setting.PassThroughParameters.Count > 0))
+        if (
+            remoteUrl is not null
+            && queryString.HasValue
+            && (setting.PassThroughAllParameters || setting.PassThroughParameters.Count > 0)
+        )
         {
             var rawQuery = queryString.Value!.TrimStart('?');
             var allParams = rawQuery
@@ -94,21 +110,34 @@ public static class Helpers
                 {
                     var eq = p.IndexOf('=');
                     return eq >= 0
-                        ? (Key: Uri.UnescapeDataString(p[..eq]), Value: (string?)Uri.UnescapeDataString(p[(eq + 1)..]))
+                        ? (
+                            Key: Uri.UnescapeDataString(p[..eq]),
+                            Value: (string?)Uri.UnescapeDataString(p[(eq + 1)..])
+                        )
                         : (Key: Uri.UnescapeDataString(p), Value: (string?)null);
                 });
 
             var markerKey = options.QueryParameterMarker;
             var eligibleParams = !string.IsNullOrEmpty(markerKey)
-                ? allParams.TakeWhile(p => !string.Equals(p.Key, markerKey, StringComparison.OrdinalIgnoreCase))
+                ? allParams.TakeWhile(p =>
+                    !string.Equals(p.Key, markerKey, StringComparison.OrdinalIgnoreCase)
+                )
                 : allParams;
 
-            var passThroughSet = new HashSet<string>(setting.PassThroughParameters, StringComparer.OrdinalIgnoreCase);
-            var passThrough = string.Join("&", eligibleParams
-                .Where(p => setting.PassThroughAllParameters || passThroughSet.Contains(p.Key))
-                .Select(p => p.Value is not null
-                    ? $"{Uri.EscapeDataString(p.Key)}={Uri.EscapeDataString(p.Value)}"
-                    : Uri.EscapeDataString(p.Key)));
+            var passThroughSet = new HashSet<string>(
+                setting.PassThroughParameters,
+                StringComparer.OrdinalIgnoreCase
+            );
+            var passThrough = string.Join(
+                "&",
+                eligibleParams
+                    .Where(p => setting.PassThroughAllParameters || passThroughSet.Contains(p.Key))
+                    .Select(p =>
+                        p.Value is not null
+                            ? $"{Uri.EscapeDataString(p.Key)}={Uri.EscapeDataString(p.Value)}"
+                            : Uri.EscapeDataString(p.Key)
+                    )
+            );
 
             if (!string.IsNullOrEmpty(passThrough))
             {
@@ -125,7 +154,10 @@ public static class Helpers
     /// <param name="path">The path for which to find a matching remote image provider setting.</param>
     /// <param name="options">The options containing the remote image provider settings.</param>
     /// <returns>The remote image provider setting that matches the given path, or null if no matching setting is found.</returns>
-    public static RemoteImageProviderSetting? GetMatchingRemoteImageProviderSetting(this PathString path, RemoteImageProviderOptions options)
+    public static RemoteImageProviderSetting? GetMatchingRemoteImageProviderSetting(
+        this PathString path,
+        RemoteImageProviderOptions options
+    )
     {
         return options.Settings?.FirstOrDefault(x => path.IsMatchingRemoteImageProviderSetting(x));
     }
@@ -136,7 +168,10 @@ public static class Helpers
     /// <param name="path">The path to check.</param>
     /// <param name="options">The options containing the remote image provider settings.</param>
     /// <returns>True if the given path matches any of the remote image provider options, false otherwise.</returns>
-    public static bool IsMatchingRemoteImageProviderOptions(this PathString path, RemoteImageProviderOptions options)
+    public static bool IsMatchingRemoteImageProviderOptions(
+        this PathString path,
+        RemoteImageProviderOptions options
+    )
     {
         return path.GetMatchingRemoteImageProviderSetting(options) != null;
     }
@@ -147,7 +182,10 @@ public static class Helpers
     /// <param name="path">The path to check.</param>
     /// <param name="setting">The remote image provider setting to compare against.</param>
     /// <returns>True if the given path matches the specified remote image provider setting, false otherwise.</returns>
-    public static bool IsMatchingRemoteImageProviderSetting(this PathString path, RemoteImageProviderSetting setting)
+    public static bool IsMatchingRemoteImageProviderSetting(
+        this PathString path,
+        RemoteImageProviderSetting setting
+    )
     {
         return path.StartsWithSegments(setting.Prefix, StringComparison.OrdinalIgnoreCase);
     }
@@ -158,7 +196,10 @@ public static class Helpers
     /// <param name="uri">The URI for which to find a matching remote image provider setting.</param>
     /// <param name="options">The options containing the remote image provider settings.</param>
     /// <returns>The remote image provider setting that matches the given URI, or null if no matching setting is found.</returns>
-    public static RemoteImageProviderSetting? GetMatchingRemoteImageProviderSetting(this Uri uri, RemoteImageProviderOptions options)
+    public static RemoteImageProviderSetting? GetMatchingRemoteImageProviderSetting(
+        this Uri uri,
+        RemoteImageProviderOptions options
+    )
     {
         return options.Settings?.FirstOrDefault(x => uri.IsValidForSetting(x));
     }
@@ -169,7 +210,10 @@ public static class Helpers
     /// <param name="uri">The URI to check.</param>
     /// <param name="options">The options containing the remote image provider settings.</param>
     /// <returns>True if the given URI matches any of the remote image provider options, false otherwise.</returns>
-    public static bool IsMatchingRemoteImageProviderOptions(this Uri uri, RemoteImageProviderOptions options)
+    public static bool IsMatchingRemoteImageProviderOptions(
+        this Uri uri,
+        RemoteImageProviderOptions options
+    )
     {
         return uri.GetMatchingRemoteImageProviderSetting(options) != null;
     }
@@ -180,11 +224,15 @@ public static class Helpers
     /// <param name="uri">The URI for which to retrieve the remote URL.</param>
     /// <param name="options">The options containing the remote image provider settings.</param>
     /// <returns>The remote URL for the given URI, or null if no matching remote image provider setting is found.</returns>
-    public static string? GetRemoteImageProviderUrl(this Uri uri, RemoteImageProviderOptions options)
+    public static string? GetRemoteImageProviderUrl(
+        this Uri uri,
+        RemoteImageProviderOptions options
+    )
     {
         if (
-            uri.GetMatchingRemoteImageProviderSetting(options) is not RemoteImageProviderSetting setting
-            )
+            uri.GetMatchingRemoteImageProviderSetting(options)
+            is not RemoteImageProviderSetting setting
+        )
         {
             return null;
         }
@@ -192,17 +240,17 @@ public static class Helpers
         var sb = new StringBuilder();
         sb.Append(setting.Prefix);
 
-        var path = uri.AbsolutePath;
+        var path = uri.ToString();
 
         if (
             string.IsNullOrWhiteSpace(setting.RemoteUrlPrefix) == false
             && Uri.TryCreate(setting.RemoteUrlPrefix, UriKind.Absolute, out Uri? remoteUri)
-            && remoteUri != null
+            && remoteUri?.ToString() is string remoteUrl
         )
         {
-            if (path.StartsWith(remoteUri.AbsolutePath, StringComparison.OrdinalIgnoreCase))
+            if (path.StartsWith(remoteUrl, StringComparison.OrdinalIgnoreCase))
             {
-                path = path[remoteUri.AbsolutePath.TrimEnd('/').Length..];
+                path = path[remoteUrl.TrimEnd('/').Length..];
             }
         }
 
@@ -222,19 +270,27 @@ public static class Helpers
                 {
                     var eq = p.IndexOf('=');
                     return eq >= 0
-                        ? (Key: Uri.UnescapeDataString(p[..eq]), Value: (string?)Uri.UnescapeDataString(p[(eq + 1)..]))
+                        ? (
+                            Key: Uri.UnescapeDataString(p[..eq]),
+                            Value: (string?)Uri.UnescapeDataString(p[(eq + 1)..])
+                        )
                         : (Key: Uri.UnescapeDataString(p), Value: (string?)null);
                 });
 
             var passThroughSet = setting.PassThroughAllParameters
                 ? null
-                : new HashSet<string>(setting.PassThroughParameters, StringComparer.OrdinalIgnoreCase);
+                : new HashSet<string>(
+                    setting.PassThroughParameters,
+                    StringComparer.OrdinalIgnoreCase
+                );
 
             var kept = allParams
                 .Where(p => passThroughSet is null || passThroughSet.Contains(p.Key))
-                .Select(p => p.Value is not null
-                    ? $"{Uri.EscapeDataString(p.Key)}={Uri.EscapeDataString(p.Value)}"
-                    : Uri.EscapeDataString(p.Key))
+                .Select(p =>
+                    p.Value is not null
+                        ? $"{Uri.EscapeDataString(p.Key)}={Uri.EscapeDataString(p.Value)}"
+                        : Uri.EscapeDataString(p.Key)
+                )
                 .ToList();
 
             if (kept.Count > 0)
@@ -242,13 +298,6 @@ public static class Helpers
                 sb.Append('?');
                 sb.Append(string.Join("&", kept));
             }
-        }
-
-        var marker = options.QueryParameterMarker;
-        if (!string.IsNullOrEmpty(marker))
-        {
-            sb.Append(sb.ToString().Contains('?') ? "&" : "?");
-            sb.Append(Uri.EscapeDataString(marker));
         }
 
         return sb.ToString();
@@ -268,7 +317,9 @@ public static class Helpers
         return builder;
     }
 
-    public static IServiceCollection SetRemoteImageProviderCacheKey(this IServiceCollection services)
+    public static IServiceCollection SetRemoteImageProviderCacheKey(
+        this IServiceCollection services
+    )
     {
         services.AddSingleton<ICacheKey, RemoteImageProviderCacheKey>();
         return services;
@@ -281,7 +332,10 @@ public static class Helpers
     /// <param name="services">The service collection.</param>
     /// <param name="index">The zero-based index at which the provider should be inserted.</param>
     /// <returns>The <see cref="IServiceCollection"/>.</returns>
-    public static IServiceCollection InsertImageProvider<TProvider>(this IServiceCollection services, int index)
+    public static IServiceCollection InsertImageProvider<TProvider>(
+        this IServiceCollection services,
+        int index
+    )
         where TProvider : class, IImageProvider
     {
         var descriptors = services.Where(x => x.ServiceType == typeof(IImageProvider)).ToList();
@@ -299,8 +353,8 @@ public static class Helpers
         return services;
     }
 
-    private static Type? GetImplementationType(this ServiceDescriptor descriptor)
-        => descriptor.ImplementationType
+    private static Type? GetImplementationType(this ServiceDescriptor descriptor) =>
+        descriptor.ImplementationType
         ?? descriptor.ImplementationInstance?.GetType()
         ?? descriptor.ImplementationFactory?.GetType().GenericTypeArguments[1];
 }
