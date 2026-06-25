@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using System.Reflection;
 using Umbraco.Cms.Core.Manifest;
 using Umbraco.Cms.Infrastructure.Manifest;
 
@@ -9,15 +11,21 @@ public class ImageSharpRemoteImagesManifestReader : IPackageManifestReader
     {
         return await Task.Run(() =>
         {
-            return new List<PackageManifest>() {
-                new PackageManifest()
+            var versionInfo = FileVersionInfo.GetVersionInfo(
+                Assembly.GetExecutingAssembly().Location
+            );
+            var version =
+                $"{versionInfo.FileMajorPart}.{versionInfo.FileMinorPart}.{versionInfo.FileBuildPart}";
+            return new List<PackageManifest>()
             {
-                AllowTelemetry = true,
-                Name = "ImageSharp Remote Images",
-                Extensions = Array.Empty<object>(),
-                Version = "14.0.0"
-                }
-        };
+                new PackageManifest()
+                {
+                    AllowTelemetry = true,
+                    Name = "Umbraco.Community.ImageSharpRemoteImages",
+                    Extensions = Array.Empty<object>(),
+                    Version = version,
+                },
+            };
         });
     }
 }
