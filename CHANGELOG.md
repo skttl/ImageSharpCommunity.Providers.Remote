@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.3.1]
+- **`GetRemoteImageProviderUrl` updated** — fixed a regression when generating remote urls for images, where the settings doesn't auto prefix the hostname. Also removed the default addition of the `QueryParameterMarker`.
+
 ## [1.3.0]
 
 ### Added
@@ -57,6 +60,13 @@ All notable changes to this project will be documented in this file.
 # Umbraco package changelog
 
 ## [Unreleased]
+
+## [18.0.0]
+- Upgrades Umbraco dependency to Umbraco 18
+
+## [17.3.0]
+- Fixes version number in package.manifest
+- Upgrades ImageSharpComminty.Providers.Remote dependency
 
 ## [17.2.0]
 
