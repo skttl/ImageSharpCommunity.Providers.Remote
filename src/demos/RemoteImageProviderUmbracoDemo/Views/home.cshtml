@@ -1,6 +1,8 @@
 
 @using ImageSharpCommunity.Providers.Remote.Configuration
+@using Microsoft.Extensions.DependencyInjection
 @using Microsoft.Extensions.Options
+@using SixLabors.ImageSharp.Web.Providers
 @using Umbraco.Cms.Core.Cache
 @using Umbraco.Cms.Core.Media
 @using Umbraco.Extensions
@@ -11,17 +13,25 @@
 @inject IImageDimensionExtractor imageDimensionExtractor;
 @inject IOptions<RemoteImageProviderOptions> imageOptions;
 @inject AppCaches appCaches;
+@inject IServiceProvider serviceProvider;
 @using ImageSharpCommunity.Providers.Remote;
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Home>
 @{
     Layout = "master.cshtml";
-    var backgroundImage = Model.HeroBackgroundImage != null ? Model.HeroBackgroundImage.Url() : String.Empty;
+    var backgroundImage = Model.HeroBackgroundImage != null ? Model.HeroBackgroundImage.GetCropUrl(1000) : String.Empty;
 
     var format = "";
     var formats = new Dictionary<string, long>();
 
     var sourceUrl = new Uri($"https://www.ecreo.dk/media/e2cmeyrm/regnskab2024.png");
     var ourSourceUrl = new Uri("https://our.umbraco.com/media/upload/1bfc4cad-4ab9-4dbb-9c11-c2aba80c48c3/52993696145_431a3ec8bd_k.jpg");
+
+    <div style="height:100px"></div>
+
+    @string.Join(",", (serviceProvider.GetServices<IImageProvider>().ToList()))
+    <pre>
+    @Json.Serialize(imageOptions.Value)
+    </pre>
 
     var ourRemoteUrl = ourSourceUrl.GetRemoteImageProviderUrl(imageOptions.Value);
     var remoteUrl = sourceUrl.GetRemoteImageProviderUrl(imageOptions.Value);
@@ -48,9 +58,8 @@
 {
     <h1>@size.Value.Width x @size.Value.Height</h1>
 } *@
-
-<img src="@remoteUrl?width=100" />
-<img src="@ourRemoteUrl?width=100" />
+<img src="@remoteUrl.GetCropUrl(100)" />
+<img src="@ourRemoteUrl.GetCropUrl(100)" />
 @foreach (var f in formats)
 {
     <div>
