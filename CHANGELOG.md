@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.3.2]
+- **`RemoteImageProvider.IsMatch`** - changed log level til debug 
+
 ## [1.3.1]
 - **`GetRemoteImageProviderUrl` updated** — fixed a regression when generating remote urls for images, where the settings doesn't auto prefix the hostname. Also removed the default addition of the `QueryParameterMarker`.
 
@@ -61,8 +64,14 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [18.1.0]
+- Upgrades ImageSharpComminty.Providers.Remote dependency
+
 ## [18.0.0]
 - Upgrades Umbraco dependency to Umbraco 18
+
+## [17.4.0]
+- Upgrades ImageSharpComminty.Providers.Remote dependency
 
 ## [17.3.0]
 - Fixes version number in package.manifest
