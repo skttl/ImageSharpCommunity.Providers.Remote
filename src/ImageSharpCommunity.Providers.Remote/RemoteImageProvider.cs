@@ -131,7 +131,7 @@ public class RemoteImageProvider : IImageProvider
     {
         if (context.Request.Path.GetMatchingRemoteImageProviderSetting(_options) is null)
         {
-            _logger.LogInformation(
+            _logger.LogDebug(
                 "No matching remote image provider setting found for path: {path}",
                 context.Request.Path
             );
