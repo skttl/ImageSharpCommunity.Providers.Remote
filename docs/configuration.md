@@ -11,6 +11,7 @@ The `RemoteImageProviderOptions` class provides the following configuration opti
 Each setting (`RemoteImageProviderSetting`) provides the following configuration options:
 
 - `Prefix`: Specified in the constructor, and defines the local path to prefix all remote image requests with. For example, setting this to `/remote` allows requests like `/remote/https://test.com/test.png` to pass through this provider.
+  On IIS/IIS Express, simple URLs like this often work as-is. If the embedded remote URL contains special characters or escaped sequences, you may also need `system.webServer/security/requestFiltering@allowDoubleEscaping="true"` on the host, otherwise IIS can reject the request with `404.11` before it reaches the package.
 
 - `RemoteUrlPrefix` (optional): Prefixes the URL on the server. For example, setting this to `https://test.com/` allows requests like `/remote/test.png` to download `https://test.com/test.png`. Note: You still need to allow the specific domain in the `AllowedDomains` setting.
 

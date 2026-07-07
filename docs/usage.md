@@ -4,6 +4,24 @@ Given the [example config](setup.md) ([for Umbraco here](setup-umbraco.md)), you
 
 If using the RemoteUrlPrefix option, you can omit everything stated in the config. Eg. having set RemoteUrlPrefix to `https://test.com`, you can request images at `/remote/path/to/img.jpg`, which would then resolve to `https://test.com/path/to/img.jpg`.
 
+## IIS / IIS Express note
+
+Simple absolute remote URLs in the path, such as `/remote/https://test.com/path/to/img.jpg`, will often work fine on IIS and IIS Express.
+
+Problems typically appear when the embedded remote URL contains special characters or escaped sequences. In those cases IIS/IIS Express may reject the request before it reaches ASP.NET Core with `HTTP 404.11 - Not Found` from `RequestFilteringModule`.
+
+If the same URL works when running on Kestrel but fails on IIS/IIS Express only for those kinds of URLs, you may need to allow double escaping for that site/application:
+
+```xml
+<system.webServer>
+  <security>
+    <requestFiltering allowDoubleEscaping="true" />
+  </security>
+</system.webServer>
+```
+
+Use this with care, especially in production, since it is a server-level request filtering setting rather than a package setting.
+
 ## Passing query string parameters to the remote URL
 
 By default, no query string parameters from the incoming request are forwarded to the remote server. Control this per-setting using `PassThroughAllParameters` and `PassThroughParameters`:
