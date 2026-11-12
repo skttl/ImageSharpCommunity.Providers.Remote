@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [4.0.0]
+- Upgrades to ImageSharp.Web 4.0.2 and requires .NET 8 or later. The package major version now follows ImageSharp.
+- Updates ImageSharp namespace imports for the builder, metadata and cache key APIs.
+- Includes an assembly-scoped Six Labors Community license for local and CI Release builds, valid until 2028-02-10.
+
 ## [1.3.2]
 - **`RemoteImageProvider.IsMatch`** - changed log level til debug 
 
@@ -63,6 +68,10 @@ All notable changes to this project will be documented in this file.
 # Umbraco package changelog
 
 ## [Unreleased]
+
+## [19.0.0-rc001]
+- Targets Umbraco 19.0.0-rc1 and .NET 11.
+- Uses ImageSharpCommunity.Providers.Remote 4.0.0 for ImageSharp 4 support.
 
 ## [18.1.0]
 - Upgrades ImageSharpComminty.Providers.Remote dependency

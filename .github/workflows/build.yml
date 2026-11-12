@@ -8,12 +8,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 9.0.x
+        dotnet-version: 11.0.x
     - name: Build ImageSharp Package
       run: dotnet build ./src/ImageSharpCommunity.Providers.Remote/ImageSharpCommunity.Providers.Remote.csproj --configuration Release
+    - name: Pack ImageSharp Package for local restore
+      run: dotnet pack ./src/ImageSharpCommunity.Providers.Remote/ImageSharpCommunity.Providers.Remote.csproj --configuration Release --no-build --output ./artifacts
     - name: Build Umbraco Package
-      run: dotnet build ./src/Umbraco.Community.ImageSharpRemoteImages/Umbraco.Community.ImageSharpRemoteImages.csproj --configuration Release
+      run: dotnet build ./src/Umbraco.Community.ImageSharpRemoteImages/Umbraco.Community.ImageSharpRemoteImages.csproj --configuration Release -p:RestoreAdditionalProjectSources=${{ github.workspace }}/artifacts

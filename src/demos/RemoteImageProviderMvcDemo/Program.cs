@@ -1,6 +1,6 @@
 using ImageSharpCommunity.Providers.Remote;
 using ImageSharpCommunity.Providers.Remote.Configuration;
-using SixLabors.ImageSharp.Web.DependencyInjection;
+using SixLabors.ImageSharp.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 

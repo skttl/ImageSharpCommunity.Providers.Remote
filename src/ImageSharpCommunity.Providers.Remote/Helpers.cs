@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using SixLabors.ImageSharp.Web.Caching;
-using SixLabors.ImageSharp.Web.DependencyInjection;
+using SixLabors.ImageSharp.Web;
 using SixLabors.ImageSharp.Web.Providers;
 
 namespace ImageSharpCommunity.Providers.Remote;
