@@ -10,6 +10,12 @@ ImageSharpCommunity.Providers.Remote is a library that provides remote image loa
 
 ## Installation
 
+Version 4 targets .NET 8 or later and uses ImageSharp.Web 4. The package major version follows ImageSharp. Use version 1.x for applications that still use ImageSharp.Web 3.
+
+ImageSharp.Web 4 requires a [Six Labors license](https://docs.sixlabors.com/articles/imagesharp.web/) for Release builds. This repository includes an assembly-scoped Community license in `sixlabors.lic`, configured through `Directory.Build.props`, for building the named open-source assemblies locally and in CI. It expires on 2028-02-10. Six Labors permits publishing assembly-scoped Community licenses; unrestricted and commercial license keys must remain private.
+
+Publish `ImageSharpCommunity.Providers.Remote` 4.0.0 before publishing the Umbraco 19 package. The build workflow uses a local package to verify both packages before publication.
+
 You can install the library via NuGet.
 
 ```bash

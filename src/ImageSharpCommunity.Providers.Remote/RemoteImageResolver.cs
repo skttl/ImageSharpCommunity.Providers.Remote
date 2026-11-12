@@ -1,5 +1,6 @@
 using ImageSharpCommunity.Providers.Remote.Configuration;
 using Microsoft.Extensions.Logging;
+using SixLabors.ImageSharp.Web;
 using SixLabors.ImageSharp.Web.Resolvers;
 
 namespace ImageSharpCommunity.Providers.Remote;

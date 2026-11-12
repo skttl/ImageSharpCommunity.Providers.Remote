@@ -8,6 +8,10 @@ Umbraco.Community.ImageSharpRemoteImages is a package wrapping [ImageSharpCommun
 
 ## Installation
 
+Version 19 targets Umbraco 19 and .NET 11, and uses ImageSharp 4 through ImageSharpCommunity.Providers.Remote 4.0.0. The current prerelease targets Umbraco 19.0.0-rc1.
+
+Before upgrading, review the [Umbraco 19 upgrade notes](https://docs.umbraco.com/umbraco-cms/19.latest/get-started/upgrading-and-migrating/version-specific). In particular, the imaging HMAC key must be canonical Base64 under .NET 11. Correcting the encoding without changing the decoded bytes preserves existing signed image URLs.
+
 You can install the library via NuGet.
 
 ```bash
